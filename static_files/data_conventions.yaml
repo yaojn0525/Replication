@@ -1,0 +1,1799 @@
+### CASH DEPOSIT
+# pick one example
+USD-CASH-DEPOSIT : 
+  type : CASH DEPOSIT
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 10_000_000
+    accrual basis : ACTUAL/360
+    payment business day convention : MF
+    payment holiday convention : NYC,LON
+    end of month : True
+### FRA OR FIXING
+USD-LIBOR-BBA-1M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 1_000_000
+    index : USD-LIBOR-BBA-1M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+USD-LIBOR-BBA-3M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 1_000_000
+    index : USD-LIBOR-BBA-3M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+USD-LIBOR-BBA-6M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 1_000_000
+    index : USD-LIBOR-BBA-6M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+USD-LIBOR-BBA-1Y-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 1_000_000
+    index : USD-LIBOR-BBA-1Y
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+USD-TERM-SOFR-PROXY-1M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 1_000_000
+    index : USD-TERM-SOFR-PROXY-1M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+USD-TERM-SOFR-PROXY-3M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 1_000_000
+    index : USD-TERM-SOFR-PROXY-3M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+USD-TERM-SOFR-PROXY-6M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 1_000_000
+    index : USD-TERM-SOFR-PROXY-6M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+USD-TERM-SOFR-PROXY-1Y-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 1_000_000
+    index : USD-TERM-SOFR-PROXY-1Y
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+USD-Federal Funds-H.15-1B-FRA:
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 1_000_000
+    index : USD-Federal Funds-H.15-1B
+    accrual basis : Actual/360
+    payment business day convention: F
+    payment holiday convention: NYC
+    fra style : ISDA
+    end of month : False
+SOFR-1B-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 1_000_000
+    index : SOFR-1B
+    accrual basis : Actual/360
+    payment business day convention: F
+    payment holiday convention: USGS
+    fra style : ISDA
+    end of month : False
+CAD-BA-1M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 1_000_000
+    index : CAD-BA-1M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: TOR
+    fra style : ISDA
+    end of month : False
+CAD-BA-3M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 1_000_000
+    index : CAD-BA-3M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: TOR
+    fra style : ISDA
+    end of month : False
+CAD-BA-6M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 1_000_000
+    index : CAD-BA-6M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: TOR
+    fra style : ISDA
+    end of month : False
+CAD-BA-1Y-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 1_000_000
+    index : CAD-BA-1Y
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: TOR
+    fra style : ISDA
+    end of month : False
+CORRA-1B-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 1_000_000
+    index : CORRA-1B
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: F
+    payment holiday convention: TOR
+    fra style : ISDA
+    end of month : False
+GBP-LIBOR-BBA-1M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : LON
+    currency : GBP
+    notional : 1_000_000
+    index : GBP-LIBOR-BBA-1M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: LON
+    fra style : ISDA
+    end of month : False
+GBP-LIBOR-BBA-3M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : LON
+    currency : GBP
+    notional : 1_000_000
+    index : GBP-LIBOR-BBA-3M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: LON
+    fra style : ISDA
+    end of month : False
+GBP-LIBOR-BBA-6M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : LON
+    currency : GBP
+    notional : 1_000_000
+    index : GBP-LIBOR-BBA-6M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: LON
+    fra style : ISDA
+    end of month : False
+GBP-LIBOR-BBA-1Y-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : LON
+    currency : GBP
+    notional : 1_000_000
+    index : GBP-LIBOR-BBA-1Y
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: LON
+    fra style : ISDA
+    end of month : False
+SONIA-1B-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : LON
+    currency : GBP
+    notional : 1_000_000
+    index : SONIA-1B
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: F
+    payment holiday convention: LON
+    fra style : ISDA
+    end of month : False
+EUR-EURIBOR-Telerate-1M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 1_000_000
+    index : EUR-EURIBOR-Telerate-1M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: TARGET
+    fra style : ISDA
+    end of month : False
+EUR-EURIBOR-Telerate-3M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 1_000_000
+    index : EUR-EURIBOR-Telerate-3M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: TARGET
+    fra style : ISDA
+    end of month : False
+EUR-EURIBOR-Telerate-6M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 1_000_000
+    index : EUR-EURIBOR-Telerate-6M
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: TARGET
+    fra style : ISDA
+    end of month : False
+EUR-EURIBOR-Telerate-1Y-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 1_000_000
+    index : EUR-EURIBOR-Telerate-1Y
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: TARGET
+    fra style : ISDA
+    end of month : False
+EONIA-1B-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TARGET
+    currency : GBP
+    notional : 1_000_000
+    index : EONIA-1B
+    accrual basis : Actual/360
+    payment business day convention: F
+    payment holiday convention: TARGET
+    fra style : ISDA
+    end of month : False
+EuroSTR-1B-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 1_000_000
+    index : EuroSTR-1B
+    accrual basis : Actual/360
+    payment business day convention: F
+    payment holiday convention: TARGET
+    fra style : ISDA
+    end of month : False
+AUD-LIBOR-BBA-1M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : SYD
+    currency : AUD
+    notional : 1_000_000
+    index : AUD-LIBOR-BBA-1M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: SYD
+    fra style : AFMA
+    end of month : False
+AUD-LIBOR-BBA-3M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : SYD
+    currency : AUD
+    notional : 1_000_000
+    index : AUD-LIBOR-BBA-3M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: SYD
+    fra style : AFMA
+    end of month : False
+AUD-LIBOR-BBA-6M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : SYD
+    currency : AUD
+    notional : 1_000_000
+    index : AUD-LIBOR-BBA-6M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: SYD
+    fra style : AFMA
+    end of month : False
+AUD-LIBOR-BBA-1Y-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : SYD
+    currency : AUD
+    notional : 1_000_000
+    index : AUD-LIBOR-BBA-1Y
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: SYD
+    fra style : AFMA
+    end of month : False
+AONIA-1B-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : SYD
+    currency : AUD
+    notional : 1_000_000
+    index : AONIA-1B
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: F
+    payment holiday convention: SYD
+    fra style : ISDA
+    end of month : False
+JPY-LIBOR-BBA-1M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TOK
+    currency : JPY
+    notional : 100_000_000
+    index : JPY-LIBOR-BBA-1M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: TOK
+    fra style : ISDA
+    end of month : False
+JPY-LIBOR-BBA-3M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TOK
+    currency : JPY
+    notional : 100_000_000
+    index : JPY-LIBOR-BBA-3M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: TOK
+    fra style : ISDA
+    end of month : False
+JPY-LIBOR-BBA-6M-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TOK
+    currency : JPY
+    notional : 100_000_000
+    index : JPY-LIBOR-BBA-6M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: TOK
+    fra style : ISDA
+    end of month : False
+JPY-LIBOR-BBA-1Y-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TOK
+    currency : JPY
+    notional : 100_000_000
+    index : JPY-LIBOR-BBA-1Y
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention: MF
+    payment holiday convention: TOK
+    fra style : ISDA
+    end of month : False
+TONA-1B-FRA : 
+  type : FRA OR FIXING
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TOK
+    currency : JPY
+    notional : 100_000_000
+    index : TONA-1B
+    accrual basis : Actual/360
+    payment business day convention: MF
+    payment holiday convention: TOK
+    fra style : ISDA
+    end of month : False
+### OVERNIGHT INDEX FUTURE
+SOFR-FUTURE-1M : 
+  type : OVERNIGHT INDEX FUTURE
+  convention : 
+    currency : USD
+    contractual notional : 5_000_000
+    index: USD-SOFR-AVERAGE
+    rate cutoff : 1D
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: USGS
+    basis point: 41.67
+SOFR-FUTURE-3M : 
+  type : OVERNIGHT INDEX FUTURE
+  convention : 
+    currency : USD
+    contractual notional : 1_000_000
+    index: USD-SOFR-COMPOUND
+    rate cutoff : 1D
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: USGS
+    basis point: 25
+FEDFUNDS-FUTURE : 
+  type : OVERNIGHT INDEX FUTURE
+  convention : 
+    currency : USD
+    contractual notional : 5_000_000
+    index: USD-Federal Funds-H.15-AVERAGE
+    rate cutoff : 1D
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis point: 41.67
+CORRA-FUTURE-3M : 
+  type : OVERNIGHT INDEX FUTURE
+  convention : 
+    currency : CAD
+    contractual notional : 1_000_000
+    index: CAD-CORRA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: TOR
+    basis point: 25
+SONIA-FUTURE-3M : 
+  type : OVERNIGHT INDEX FUTURE
+  convention : 
+    currency : GBP
+    contractual notional : 1_000_000
+    index: GBP-SONIA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 0D
+    payment business day convention: MF
+    payment holiday convention: LON
+    basis point: 25
+EONIA-FUTURE : 
+  type : OVERNIGHT INDEX FUTURE
+  convention : 
+    currency : EUR
+    contractual notional : 3_000_000
+    index: EUR-EONIA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: TARGET
+    basis point: 25
+AONIA-FUTURE : 
+  type : OVERNIGHT INDEX FUTURE
+  convention : 
+    currency : AUD
+    contractual notional : 3_000_000
+    index: AUD-AONIA-AVERAGE
+    rate cutoff : 1D
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: SYD
+    basis point: 24.66
+TONA-FUTURE-3M : 
+  type : OVERNIGHT INDEX FUTURE
+  convention : 
+    currency : JPY
+    contractual notional : 250_000
+    index: JPY-TONA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: TOK
+    basis point: 25
+### OVERNIGHT INDEX SWAP
+USD-SOFR-OIS : 
+  type : OVERNIGHT INDEX SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    accrual period : 1Y
+    accrual basis : Actual/360
+    index: USD-SOFR-COMPOUND
+    rate cutoff : 1D
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+USD-SOFR-CME-OIS : 
+  type : OVERNIGHT INDEX SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    accrual period : 1Y
+    accrual basis : Actual/360
+    index: USD-SOFR-CME-COMPOUND
+    rate cutoff : 1D
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+USD-OIS : 
+  type : OVERNIGHT INDEX SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    accrual period : 1Y
+    accrual basis : Actual/360
+    index: USD-Federal Funds-H.15-COMPOUND
+    rate cutoff : 1D
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+CAD-OIS : 
+  type : OVERNIGHT INDEX SWAP
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 1_000_000_000
+    accrual period : 1Y
+    accrual basis : ACTUAL/365 (FIXED)
+    index: CAD-CORRA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: TOR
+GBP-OIS : 
+  type : OVERNIGHT INDEX SWAP
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : LON
+    currency : GBP
+    notional : 1_000_000_000
+    accrual period : 1Y
+    accrual basis : ACTUAL/365 (FIXED)
+    index: GBP-SONIA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 0D
+    payment business day convention: MF
+    payment holiday convention: LON
+EUR-OIS : 
+  type : OVERNIGHT INDEX SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 10_000_000
+    accrual period : 1Y
+    accrual basis : ACTUAL/360
+    index: EUR-EONIA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: TARGET
+AUD-OIS : 
+  type : OVERNIGHT INDEX SWAP
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : SYD
+    currency : AUD
+    notional : 100_000_000
+    accrual period : 1Y
+    accrual basis : ACTUAL/365 (FIXED)
+    index: AUD-AONIA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: SYD
+JPY-OIS : 
+  type : OVERNIGHT INDEX SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TOK
+    currency : JPY
+    notional : 10_000_000
+    accrual period : 1Y
+    accrual basis : ACTUAL/365 (FIXED)
+    index: JPY-TONA-COMPOUND
+    rate cutoff : 1D
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: TOK
+### OVERNIGHT INDEX BASIS SWAP ('39')
+USD-SOFR-COMPOUND-OVER-USD-LIBOR-BBA-3M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 10_000_000
+    overnight composite index : USD-SOFR-COMPOUND
+    rate cutoff : 1D
+    ibor index : USD-LIBOR-BBA-3M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC,LON
+    accrual period: 3M
+USD-SOFR-COMPOUND-OVER-USD-TERM-SOFR-PROXY-1M-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-COMPOUND
+    rate cutoff : 1D
+    reference overnight composite index : USD-TERM-SOFR-PROXY-1M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 1M
+    reference accrual period: 1M
+USD-SOFR-COMPOUND-OVER-USD-TERM-SOFR-PROXY-3M-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-COMPOUND
+    rate cutoff : 1D
+    reference overnight composite index : USD-TERM-SOFR-PROXY-3M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-SOFR-COMPOUND-OVER-USD-TERM-SOFR-PROXY-6M-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-COMPOUND
+    rate cutoff : 1D
+    reference overnight composite index : USD-TERM-SOFR-PROXY-6M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 6M
+    reference accrual period: 6M
+USD-SOFR-COMPOUND-OVER-USD-TERM-SOFR-PROXY-1Y-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-COMPOUND
+    rate cutoff : 1D
+    reference overnight composite index : USD-TERM-SOFR-PROXY-1Y
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 1Y
+    reference accrual period: 1Y
+USD-Term SOFR Base-COMPOUND-OVER-USD-TERM-SOFR-PROXY-1M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    overnight composite index : USD-Term SOFR Base-COMPOUND
+    rate cutoff : 1D
+    ibor index : USD-TERM-SOFR-PROXY-1M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC,LON
+    accrual period: 1M
+USD-Term SOFR Base-COMPOUND-OVER-USD-TERM-SOFR-PROXY-3M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    overnight composite index : USD-Term SOFR Base-COMPOUND
+    rate cutoff : 1D
+    ibor index : USD-TERM-SOFR-PROXY-3M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC,LON
+    accrual period: 3M
+USD-Term SOFR Base-COMPOUND-OVER-USD-TERM-SOFR-PROXY-6M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    overnight composite index : USD-Term SOFR Base-COMPOUND
+    rate cutoff : 1D
+    ibor index : USD-TERM-SOFR-PROXY-6M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC,LON
+    accrual period: 6M
+USD-Term SOFR Base-COMPOUND-OVER-USD-TERM-SOFR-PROXY-1Y-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    overnight composite index : USD-Term SOFR Base-COMPOUND
+    rate cutoff : 1D
+    ibor index : USD-TERM-SOFR-PROXY-1Y
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC,LON
+    accrual period: 1Y
+CAD-CORRA-COMPOUND-OVER-CAD-BA-3M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 10_000_000
+    overnight composite index : CAD-CORRA-COMPOUND
+    rate cutoff : 1D
+    ibor index : CAD-BA-3M
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: TOR
+    accrual period: 3M
+GBP-SONIA-COMPOUND-OVER-GBP-BBA-3M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : LON
+    currency : GBP
+    notional : 10_000_000
+    overnight composite index : GBP-SONIA-COMPOUND
+    rate cutoff : 1D
+    ibor index : GBP-LIBOR-BBA-3M
+    payment offset: 0D
+    payment business day convention: MF
+    payment holiday convention: LON
+    accrual period: 3M
+EUR-EONIA-COMPOUND-OVER-EUR-EURIBOR-Telerate-3M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 10_000_000
+    overnight composite index : EUR-EONIA-COMPOUND
+    rate cutoff : 1D
+    ibor index : EUR-EURIBOR-Telerate-3M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: TARGET
+    accrual period: 3M
+EUR-EuroSTR-COMPOUND-OVER-EUR-EURIBOR-Telerate-3M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 10_000_000
+    overnight composite index : EUR-EuroSTR-COMPOUND
+    rate cutoff : 1D
+    ibor index : EUR-EURIBOR-Telerate-3M
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: TARGET
+    accrual period: 3M
+AUD-AONIA-COMPOUND-OVER-AUD-LIBOR-BBA-3M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : SYD
+    currency : AUD
+    notional : 10_000_000
+    overnight composite index : AUD-AONIA-COMPOUND
+    rate cutoff : 1D
+    ibor index : AUD-LIBOR-BBA-3M
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: SYD
+    accrual period: 3M
+JPY-TONA-COMPOUND-OVER-JPY-LIBOR-BBA-3M-BASIS-SWAP : 
+  type : OVERNIGHT INDEX BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TOK
+    currency : JPY
+    notional : 10_000_000
+    overnight composite index : JPY-TONA-COMPOUND
+    rate cutoff : 1D
+    ibor index : JPY-LIBOR-BBA-3M
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: TOK,LON
+    accrual period: 3M
+### OIS BASIS SWAP ('53)
+USD-SOFR-AVG-OVER-USD-SOFR-AVERAGE-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-AVG
+    rate cutoff : 1D
+    reference overnight composite index : USD-SOFR-AVERAGE
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-SOFR-AVG-OVER-USD-SOFR-COMPOUND :
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-AVG
+    rate cutoff : 1D
+    reference overnight composite index : USD-SOFR-COMPOUND
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-SOFR-CME-AVG-OVER-USD-SOFR-CME-COMPOUND:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-CME-AVG
+    rate cutoff : 1D
+    reference overnight composite index : USD-SOFR-CME-COMPOUND
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-SOFR-COMPOUND-OVER-USD-Federal Funds-H.15-OIS-COMPOUND-BASIS-SWAP : 
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-COMPOUND
+    rate cutoff : 1D
+    reference overnight composite index : USD-Federal Funds-H.15-COMPOUND
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-SOFR-CME-COMPOUND-OVER-USD-Federal Funds-H.15-CME-OIS-COMPOUND-BASIS-SWAP : 
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-SOFR-CME-COMPOUND
+    rate cutoff : 1D
+    reference overnight composite index : USD-Federal Funds-H.15-CME-COMPOUND
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-Federal Funds-H.15-AVG-OVER-USD-Federal Funds-H.15-AVERAGE-BASIS-SWAP : 
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-Federal Funds-H.15-AVG
+    rate cutoff : 1D
+    reference overnight composite index : USD-Federal Funds-H.15-AVERAGE
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-FFunds-H.15-CME-AVG-OVER-USD-FFunds-H.15-CME-OIS-CMPD-BASIS :
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-Federal Funds-H.15-CME-AVG
+    rate cutoff : 1D
+    reference overnight composite index : USD-Federal Funds-H.15-CME-AVERAGE
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-Federal Funds-H.15-AVG-OVER-USD-Federal Funds-H.15-OIS-CMPD-BASIS :
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-Federal Funds-H.15-AVG
+    rate cutoff : 1D
+    reference overnight composite index : USD-Federal Funds-H.15-COMPOUND
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+USD-Federal Funds-H.15-CME-AVG-OVER-USD-Federal Funds-H.15-CME-OIS-CMPD-BASIS :
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis overnight composite index : USD-Federal Funds-H.15-CME-AVG
+    rate cutoff : 1D
+    reference overnight composite index : USD-Federal Funds-H.15-CME-COMPOUND
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: NYC
+    basis accrual period: 3M
+    reference accrual period: 3M
+CAD-CORRA-AVG-OVER-CAD-CORRA-AVERAGE-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 10_000_000
+    basis overnight composite index : CAD-CORRA-AVG
+    rate cutoff : 1D
+    reference overnight composite index : CAD-CORRA-AVERAGE
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: TOR
+    basis accrual period: 3M
+    reference accrual period: 3M
+GBP-SONIA-AVG-OVER-GBP-SONIA-AVERAGE-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 0D
+    settlement holiday convention : LON
+    currency : GBP
+    notional : 10_000_000
+    basis overnight composite index : GBP-SONIA-AVG
+    rate cutoff : 1D
+    reference overnight composite index : GBP-SONIA-AVERAGE
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: LON
+    basis accrual period: 3M
+    reference accrual period: 3M
+EUR-EuroSTR-AVG-OVER-EUR-EuroSTR-AVERAGE-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TARGET
+    currency : EUR
+    notional : 10_000_000
+    basis overnight composite index : EUR-EuroSTR-AVG
+    rate cutoff : 1D
+    reference overnight composite index : EUR-EuroSTR-AVERAGE
+    payment offset: 1D
+    payment business day convention: MF
+    payment holiday convention: TARGET
+    basis accrual period: 3M
+    reference accrual period: 3M
+JPY-TONA-AVG-OVER-JPY-TONA-AVERAGE-BASIS-SWAP:
+  type : OIS BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : TOK
+    currency : JPY
+    notional : 10_000_000
+    basis overnight composite index : JPY-TONA-AVG
+    rate cutoff : 1D
+    reference overnight composite index : JPY-TONA-AVERAGE
+    payment offset: 2D
+    payment business day convention: MF
+    payment holiday convention: TOK
+    basis accrual period: 3M
+    reference accrual period: 3M
+### OVERNIGHT INDEX CURRENCY BASIS SWAP
+CAD-CORRA-COMPOUND-3M-OVER-USD-SOFR-COMPOUND-3M-OVERNIGHT-INDEX-CBS:
+  type : OVERNIGHT INDEX CURRENCY BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS,TOR
+    mark notional to market : None
+    fx rate fixing holiday convention : NYC,TOR
+    fx rate fixing offset : 2D
+    basis currency : CAD
+    basis notional : 10_000_000
+    basis overnight composite index : CAD-CORRA-COMPOUND
+    basis accrual period : 3M 
+    basis payment offset : 2D
+    reference currency : USD
+    reference overnight composite index : USD-SOFR-COMPOUND
+    reference accrual period : 3M 
+    reference payment offset : 2D
+GBP-SONIA-COMPOUND-3M-OVER-USD-SOFR-COMPOUND-3M-OVERNIGHT-INDEX-CBS:
+  type : OVERNIGHT INDEX CURRENCY BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS,LON
+    mark notional to market : None
+    fx rate fixing holiday convention : NYC,LON
+    fx rate fixing offset : 2D
+    basis currency : GBP
+    basis notional : 10_000_000
+    basis overnight composite index : GBP-SONIA-COMPOUND
+    basis accrual period : 3M 
+    basis payment offset : 2D
+    reference currency : USD
+    reference overnight composite index : USD-SOFR-COMPOUND
+    reference accrual period : 3M 
+    reference payment offset : 2D
+EUR-EuroSTR-COMPOUND-3M-OVER-USD-SOFR-COMPOUND-3M-OVERNIGHT-INDEX-CBS:
+  type : OVERNIGHT INDEX CURRENCY BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS,TARGET
+    mark notional to market : None
+    fx rate fixing holiday convention : NYC,TARGET
+    fx rate fixing offset : 2D
+    basis currency : EUR
+    basis notional : 10_000_000
+    basis overnight composite index : EUR-EuroSTR-COMPOUND
+    basis accrual period : 3M 
+    basis payment offset : 2D
+    reference currency : USD
+    reference overnight composite index : USD-SOFR-COMPOUND
+    reference accrual period : 3M 
+    reference payment offset : 2D
+JPY-TONA-COMPOUND-3M-OVER-USD-SOFR-COMPOUND-3M-OVERNIGHT-INDEX-CBS:
+  type : OVERNIGHT INDEX CURRENCY BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS,TOK
+    mark notional to market : None
+    fx rate fixing holiday convention : NYC,TOK
+    fx rate fixing offset : 2D
+    basis currency : JPY
+    basis notional : 10_000_000
+    basis overnight composite index : JPY-TONA-COMPOUND
+    basis accrual period : 3M 
+    basis payment offset : 2D
+    reference currency : USD
+    reference overnight composite index : USD-SOFR-COMPOUND
+    reference accrual period : 3M 
+    reference payment offset : 2D
+# OIS IBOR CURRENCY BASIS SWAP
+AUD-LIBOR-BBA-3M-OVER-USD-SOFR-COMPOUND-3M-OIS-IBOR-CBS:
+  type : OIS IBOR CURRENCY BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : USGS,SYD
+    mark notional to market : None
+    fx rate fixing holiday convention : NYC,TOK
+    fx rate fixing offset : 2D
+    ibor currency : AUD
+    basis notional : 10_000_000
+    basis overnight composite index : AUD-LIBOR-BBA-3M
+    basis accrual period : 3M
+    basis payment offset : 2D
+    overnight composite currency : USD
+    overnight composite index : USD-SOFR-COMPOUND
+    overnight composite accrual period : 3M 
+    overnight composite payment offset : 2D
+    basis leg : IBOR
+### OVERNIGHT INDEX FRA SPREAD 
+# pick one example
+AUD-AONIA-COMPOUND-OVER-AUD-LIBOR-BBA-3M-FRA-SPREAD:
+  type : OVERNIGHT INDEX FRA SPREAD
+  convention : 
+    fra data convention : AUD-LIBOR-BBA-3M-FRA
+    ois data convention : AUD-OIS
+### COMPOUND SWAP
+# pick one example
+CAD-BA-3M-COMPOUND-SWAP-SEMI-ACT365F : 
+  type : COMPOUND SWAP
+  convention :
+    settlement offset : 0D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 10_000_000
+    index : CAD-BA-3M
+    payment period : 6M
+    accrual period : 6M
+    accrual basis : ACTUAL/365 (FIXED)
+    payment business day convention : MF
+    payment holiday convention : TOR
+### COMPOUND BASIS SWAP
+# pick one example
+CAD-BA-1M-OVER-CAD-BA-3M-COMPOUND-BASIS-SWAP : 
+  type : COMPOUND BASIS SWAP
+  convention :
+    settlement offset : 0D
+    settlement holiday convention : TOR
+    currency : CAD
+    notional : 10_000_000
+    basis index : CAD-BA-1M
+    basis payment period : 3M
+    compound method : SPREAD_EXCLUSIVE_COMPOUND
+    reference index : CAD-BA-3M
+    payment business day convention : MF
+    payment holiday convention : TOR
+### GENERIC FORWARD
+# pick one
+USD-LIBOR-BBA-3M-FLAT-FWD : 
+  type : GENERIC FORWARD
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 10_000_000
+    index : USD-LIBOR-BBA-3M-FLAT
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention : NONE
+    payment holiday convention : NYC,LON
+    end of month : False
+    compounding method : continuous
+### GENERIC FORWARD SPREAD (3'21)
+SOFR-1B-OVER-USD-Federal Funds-H.15-1B-SIMPLE-FWD-SPD : 
+  type : GENERIC FORWARD SPREAD
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC,LON
+    basis currency : USD
+    basis notional : 10_000_000
+    basis index : SOFR-1B
+    basis accrual basis : Actual/360
+    reference currency : USD
+    reference index : USD-Federal Funds-H.15-1B
+    reference accrual basis : Actual/365 (FIXED)
+    payment business day convention : NONE
+    payment holiday convention : NYC,LON
+    end of month : False
+    compounding method : simple
+CAD-OVER-USD-GFS : 
+  type : GENERIC FORWARD SPREAD
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC,TOR
+    basis currency : CAD
+    basis notional : 10_000_000
+    basis index : CAD
+    basis accrual basis : Actual/365 (FIXED)
+    reference currency : USD
+    reference index : USD
+    reference accrual basis : Actual/365 (FIXED)
+    payment business day convention : NONE
+    payment holiday convention : NYC,LON
+    end of month : False
+    compounding method : continuous
+### IBOR FUTURE
+# will add more if necessary
+AUDBB:
+  type : IBOR FUTURE
+  convention :
+    settlement offset : 0D
+    settlement holiday convention : SYD
+    currency : AUD
+    contractual notional : 1_000_000
+    ibor index : AUD-LIBOR-BBA-3M
+    accrual basis : Actual/365 (FIXED)
+    payment business day convention : MF
+    payment holiday convention : SYD
+    basis point value type : AUDNZD90
+    basis point value : 0
+EURUDOLLAR:
+  type : IBOR FUTURE
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    contractual notional : 1_000_000
+    ibor index : USD-LIBOR-BBA-3M
+    accrual basis : Actual/360
+    payment business day convention : MF
+    payment holiday convention : NYC,LON
+    basis point value type : FIXED
+    basis point value : 25
+### IBOR SWAP
+# will add more if necessary
+USD-SWAP-SEMI-BOND :
+  type : SWAP
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 10_000_000
+    index: USD-LIBOR-BBA-3M
+    accrual period : 6M
+    accrual basis : 30/360 (US)
+    payment business day convention: MF
+    payment holiday convention: NYC 
+    value date as first fixing date : False
+### BASIS SWAP
+# will add more if necessary
+USD-LIBOR-BBA-1M-OVER-USD-LIBOR-BBA-3M-BASIS-SWAP :
+  type : BASIS SWAP
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 10_000_000
+    basis ibor index: USD-LIBOR-BBA-1M
+    r4eference ibor index: USD-LIBOR-BBA-3M
+    payment business day convention: MF
+    payment holiday convention: NYC,LON
+### IBOR SPREAD ZERO RATE (5'20)
+# will add more later
+USD-Federal Funds-H.15-1B-OVER-USD-Federal Funds H.15-1B-FLAT-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : USD-Federal Funds-H.15-1B
+    reference index : USD-Federal Funds-H.15-1B-FLAT
+USD-Federal Funds-H.15-1B-OVER-USD-Federal Funds H.15-1B-CALIB-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : USD-Federal Funds-H.15-1B
+    reference index : USD-Federal Funds-H.15-1B-CALIB
+USD-Federal Funds-H.15-CME-1B-OVER-USD-Federal Funds H.15-CME-1B-CALIB-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : USD-Federal Funds-H.15-CME-1B
+    reference index : USD-Federal Funds-H.15-CME-1B-CALIB
+USD-Federal Funds-H.15-CME-1B-OVER-USD-Federal Funds H.15-CME-1B-FLAT-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : USD-Federal Funds-H.15-CME-1B
+    reference index : USD-Federal Funds-H.15-CME-1B-FLAT
+USD-LIBOR-BBA-3M-OVER-USD-LIBOR-BBA-3M-FLAT-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : USD-LIBOR-BBA-3M
+    reference index : USD-LIBOR-BBA-3M-FLAT
+USD-LIBOR-BBA-3M-OVER-USD-LIBOR-BBA-3M-CALIB-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : USD-LIBOR-BBA-3M
+    reference index : USD-LIBOR-BBA-3M-CALIB
+SOFR-1B-OVER-SOFR-1B-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : SOFR-1B
+    reference index : SOFR-1B-FLAT
+SOFR-1B-OVER-SOFR-1B-CALIB-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : SOFR-1B
+    reference index : SOFR-1B-CALIB
+SOFR-1B-OVER-USD-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : SOFR-1B
+    reference index : USD
+SOFR-CME-1B-OVER-SOFR-CME-1B-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : SOFR-1B
+    reference index : SOFR-CME-1B-FLAT
+SOFR-CME-1B-OVER-SOFR-CME-1B-CALIB-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : SOFR-1B
+    reference index : SOFR-CME-1B-CALIB
+CAD-BA-3M-OVER-CAD-BA-3M-FLAT-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : CAD-BA-3M
+    reference index : CAD-BA-3M-FLAT
+CAD-BA-3M-OVER-CAD-BA-3M-CALIB-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : CAD-BA-3M
+    reference index : CAD-BA-3M-CALIB
+CORRA-1B-OVER-CORRA-1B-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : CORRA-1B
+    reference index : CORRA-1B-FLAT
+CORRA-1B-OVER-CORRA-1B-CALIB-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : CORRA-1B
+    reference index : CORRA-1B-CALIB
+GBP-LIBOR-BBA-3M-OVER-GBP-LIBOR-BBA-3M-FLAT-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : GBP-LIBOR-BBA-3M
+    reference index : GBP-LIBOR-BBA-3M-FLAT
+GBP-LIBOR-BBA-3M-OVER-GBP-LIBOR-BBA-3M-CALIB-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : GBP-LIBOR-BBA-3M
+    reference index : GBP-LIBOR-BBA-3M-CALIB
+GBP-LIBOR-BBA-3M-OVER-GBP-LIBOR-BBA-6M-FLAT-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : GBP-LIBOR-BBA-6M
+    reference index : GBP-LIBOR-BBA-6M-FLAT
+GBP-LIBOR-BBA-6M-OVER-GBP-LIBOR-BBA-6M-CALIB-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : GBP-LIBOR-BBA-6M
+    reference index : GBP-LIBOR-BBA-6M-CALIB
+SONIA-1B-OVER-SONIA-1B-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : SONIA-1B
+    reference index : SONIA-1B-FLAT
+SONIA-1B-OVER-SONIA-1B-CALIB-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : SONIA-1B
+    reference index : SONIA-1B-CALIB
+EuroSTR-1D-OVER-EuroSTR-1B-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : EuroSTR-1D
+    reference index : EuroSTR-1B
+EuroSTR-1B-OVER-EuroSTR-1B-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : EuroSTR-1B
+    reference index : EuroSTR-1B-FLAT
+EuroSTR-1B-OVER-EuroSTR-1B-CALIB-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : EuroSTR-1B
+    reference index : EuroSTR-1B-CALIB
+EONIA-1B-OVER-EONIA-1B-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : EONIA-1B
+    reference index : EONIA-1B-FLAT
+EONIA-1B-OVER-EONIA-1B-CALIB-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : EONIA-1B
+    reference index : EONIA-1B-CALIB
+EUR-EURIBOR-Telerate-3M-OVER-EUR-EURIBOR-Telerate-3M-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : EUR-EURIBOR-Telerate-3M
+    reference index : EUR-EURIBOR-Telerate-3M-FLAT
+EUR-EURIBOR-Telerate-6M-OVER-EUR-EURIBOR-Telerate-6M-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : EUR-EURIBOR-Telerate-6M
+    reference index : EUR-EURIBOR-Telerate-6M-FLAT
+JPY-LIBOR-BBA-3M-OVER-JPY-LIBOR-BBA-3M-FLAT-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : JPY-LIBOR-BBA-3M
+    reference index : JPY-LIBOR-BBA-3M-FLAT
+JPY-LIBOR-BBA-3M-OVER-JPY-LIBOR-BBA-3M-CALIB-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : JPY-LIBOR-BBA-3M
+    reference index : JPY-LIBOR-BBA-3M-CALIB
+TONA-1B-OVER-TONA-1B-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : TONA-1B
+    reference index : TONA-1B-FLAT
+TONA-1B-OVER-TONA-1B-CALIB-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : TONA-1B
+    reference index : TONA-1B-CALIB
+AUD-LIBOR-BBA-3M-OVER-AUD-LIBOR-BBA-3M-FLAT-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : AUD-LIBOR-BBA-3M
+    reference index : AUD-LIBOR-BBA-3M-FLAT
+AUD-LIBOR-BBA-3M-OVER-AUD-LIBOR-BBA-3M-CALIB-ISZR :
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : AUD-LIBOR-BBA-3M
+    reference index : AUD-LIBOR-BBA-3M-CALIB
+AONIA-1B-OVER-AONIA-1B-FLAT-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : AONIA-1B
+    reference index : AONIA-1B-FLAT
+AONIA-1B-OVER-AONIA-1B-CALIB-ISZR:
+  type : IBOR SPREAD ZERO RATE
+  convention :
+    basis ibor index : AONIA-1B
+    reference index : AONIA-1B-CALIB
+### FLOATING RATE NOTE
+# will add more if necessary
+USD-LIBOR-BBA-3M-FRN :
+  type : FLOATING RATE NOTE
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : LON
+    currency : USD
+    notional : 10_000_000
+    index : USD-LIBOR-BBA-3M
+    payment business day convention : MF
+    payment holiday convention : NYC,LON
+SONIA-1B-FRN :
+  type : FLOATING RATE NOTE
+  convention : 
+    settlement offset : 1D
+    settlement holiday convention : USGS
+    currency : USD
+    notional : 10_000_000
+    index : SONIA-1B
+    payment business day convention : F
+    payment holiday convention : USGS
+### SWAP SPREAD BASIS SWAP
+# will add more
+USD-SOFR-OIS-OVER-USD-OIS-BASIS-SWAP : 
+  type : SWAP SPREAD BASIS SWAP
+  convention : 
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis swap : USD-SOFR-OIS
+    reference swap : USD-OIS
+### CURRENCY BASIS SWAP
+GBP-LIBOR-BBA-3M-OVER-CAD-BA-3M-CBS:
+  type : CURRENCY BASIS SWAP
+  convention : 
+    settlement holiday convention : TOR,LON
+    mark notional to market : reference
+    fx rate holiday convention : TOR,LON
+    fx rate fixing offset : 2D
+    basis currency : GBP
+    basis notional : 10_000_000
+    basis ibor index : GBP-LIBOR-BBA-3M
+    reference currency : USD
+    reference ibor index : CAD-BA-3M
+    payment business day convention : MF
+    payment holiday convention : TOR,LON
+### GENERIC SPREAD (9"37)
+USD-SOFR-OIS-OVER-USD-SWAP-SEMI-BOND-G-SPD : 
+  type : GENERIC SPREAD
+  convention : 
+    target data convention : USD-SOFR-OIS
+    reference data convention : USD-SWAP-SEMI-BOND
+USD-SOFR-CME-CMPD-OVER-USD-FedFunds-CME-CMPD-OVER-USD-SOFR-CMPD-OVER-USD-FedFunds-CMPD-G-SPD :
+  type : GENERIC SPREAD
+  convention : 
+    target data convention : USD-SOFR-CME-COMPOUND-OVER-USD-Federal Funds-H.15-CME-OIS-COMPOUND-BASIS-SWAP
+    reference data convention : USD-SOFR-COMPOUND-OVER-USD-Federal Funds-H.15-OIS-COMPOUND-BASIS-SWAP
+USD-SOFR-CME-AVG-OVER-USD-SOFR-CME-CMPD-BASIS-OVER-USD-SOFR-AVG-OVER-USD-SOFR-CMPD-BASIS : 
+  type : GENERIC SPREAD
+  convention : 
+    target data convention : USD-SOFR-CME-AVG-OVER-USD-SOFR-CME-COMPOUND
+    reference data convention : USD-SOFR-AVG-OVER-USD-SOFR-COMPOUND
+USD-Federal Funds-H.15-CME-AVG-OVER-USD-Federal Funds-H.15-CME-OIS-CMPD-BASIS-OVER-USD-Federal Funds-H.15-AVG-OVER-USD-Federal Funds-H.15-OIS-CMPD-BASIS :
+  type : GENERIC SPREAD
+  convention : 
+    target data convention : USD-Federal Funds-H.15-CME-AVG-OVER-USD-Federal Funds-H.15-CME-OIS-CMPD-BASIS
+    reference data convention : USD-Federal Funds-H.15-AVG-OVER-USD-Federal Funds-H.15-OIS-CMPD-BASIS
+### IFR
+# will add more
+USD-SOFR-OIS-1B-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : SOFR-1B
+USD-SOFR-OIS-1B-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : SOFR-1B-FLAT
+USD-SOFR-OIS-1B-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : SOFR-1B-CALIB
+USD-OIS-1B-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-Federal Funds-H.15-1B
+USD-OIS-1B-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-Federal Funds-H.15-1B-FLAT
+USD-OIS-1B-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-Federal Funds-H.15-1B-CALIB
+USD-LIBOR-BBA-3M-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-LIBOR-BBA-3M
+USD-LIBOR-BBA-3M-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-LIBOR-BBA-3M-FLAT
+USD-LIBOR-BBA-3M-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-LIBOR-BBA-3M-CALIB
+USD-Term SOFR Base-1B-IFR :
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-Term SOFR Base-1B
+USD-Term SOFR Base-1B-FLAT-IFR :
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-Term SOFR Base-1B-FLAT
+USD-Term SOFR Base-1B-CALIB-IFR :
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : USD-Term SOFR Base-1B-CALIB
+CAD-OIS-1B-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : CORRA-1B
+CAD-OIS-1B-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : CORRA-1B-FLAT
+CAD-OIS-1B-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : CORRA-1B-CALIB
+CAD-BA-3M-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : CAD-BA-3M-FLAT
+CAD-BA-3M-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : CAD-BA-3M-CALIB
+GBP-OIS-1B-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : SONIA-1B
+GBP-OIS-1B-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : SONIA-1B-FLAT
+GBP-OIS-1B-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : SONIA-1B-CALIB
+GBP-LIBOR-BBA-3M-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : GBP-LIBOR-BBA-3M-FLAT
+GBP-LIBOR-BBA-3M-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : GBP-LIBOR-BBA-3M-CALIB
+EUR-OIS-1B-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EONIA-1B
+EUR-OIS-1B-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EONIA-1B-FLAT
+EUR-OIS-1B-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EONIA-1B-CALIB
+EUR-EuroSTR-OIS-1B-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EuroSTR-1B
+EUR-EuroSTR-1B-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EuroSTR-1B-FLAT
+EUR-EuroSTR-OIS-1B-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EuroSTR-1B-CALIB
+EUR-EURIBOR-Telerate-3M-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EUR-EURIBOR-Telerate-3M-FLAT
+EUR-EURIBOR-Telerate-3M-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EUR-EURIBOR-Telerate-3M-CALIB
+EUR-EURIBOR-Telerate-6M-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EUR-EURIBOR-Telerate-6M-FLAT
+EUR-EURIBOR-Telerate-6M-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : EUR-EURIBOR-Telerate-6M-CALIB
+AUD-OIS-1B-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : AONIA-1B
+AUD-OIS-1B-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : AONIA-1B-FLAT
+AUD-OIS-1B-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : AONIA-1B-CALIB
+AUD-LIBOR-BBA-3M-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : AUD-LIBOR-BBA-3M-FLAT
+AUD-LIBOR-BBA-3M-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : AUD-LIBOR-BBA-3M-CALIB
+JPY-OIS-1B-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : TONA-1B
+JPY-OIS-1B-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : TONA-1B-FLAT
+JPY-OIS-1B-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : TONA-1B-CALIB
+JPY-LIBOR-BBA-3M-FLAT-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : JPY-LIBOR-BBA-3M-FLAT
+JPY-LIBOR-BBA-3M-CALIB-IFR : 
+  type : INSTANTANEOUS FORWARD RATE
+  convention : 
+    index : JPY-LIBOR-BBA-3M-CALIB
+### FX RATE INDEX
+GBP-USD:
+  type: FX RATE INDEX
+  convention:
+    fx index : GBP-USD
+EUR-USD:
+  type: FX RATE INDEX
+  convention:
+    fx index : EUR-USD
+AUD-USD:
+  type: FX RATE INDEX
+  convention:
+    fx index : AUD-USD
+USD-CAD:
+  type: FX RATE INDEX
+  convention:
+    type : USD-CAD
+USD-JPY:
+  type : FX RATE INDEX
+  convention : 
+    type : USD-JPY
+### SWAPTION (subject to changes)
+# will add more
+USD-SOFR-COMPOUND-SWAPTION :
+  type: SWAPTION
+  convention : 
+    index : USD-SOFR-COMPOUND
+    payment business day convention : F
+    payment holiday convention : USGS
+### SWAPTION (subject to changes)
+# will add more
+USD-SOFR-COMPOUND-CAPFLOOR :
+  type: CAPFLOOR
+  convention : 
+    index : USD-SOFR-COMPOUND
+    payment business day convention : F
+    payment holiday convention : USGS
+### JUMP
+# will add more
+USD-SOFR-JUMP :
+  type: JUMP
+  convention : 
+    index : SOFR-1B
+    jump_size : 1_000
+### SWAP SPREAD (9'37)
+USD-SOFR-OIS-OVER-USD-SOFR-CME-OIS-BASIS-SWAP :
+  type : SWAP SPREAD BASIS SWAP
+  convention :
+    settlement offset : 2D
+    settlement holiday convention : NYC
+    currency : USD
+    notional : 10_000_000
+    basis swap : USD-SOFR-CME-OIS
+    reference swap : USD-SOFR-OIS

@@ -1,0 +1,149 @@
+### currency funding
+USD:
+    currency: USD
+    base index: SOFR-1B
+CAD:
+    currency: CAD
+    base index: CORRA-1B
+GBP:
+    currency: GBP
+    base index: SONIA-1B
+EUR:
+    currency: EUR
+    base index: EuroSTR-1B
+AUD:
+    currency: AUD
+    base index: AONIA-1B
+JPY:
+    currency: JPY
+    base index: TONA-1B
+### index funding
+SOFR-1B-FLAT:
+    currency: USD
+    base index: SOFR-1B
+SOFR-1B-CALIB: 
+    currency: USD
+    base index: SOFR-1B
+SOFR-CME-1B-FLAT:
+    currency: USD
+    base index: SOFR-CME-1B
+SOFR-CME-1B-CALIB: 
+    currency: USD
+    base index: SOFR-CME-1B
+USD-Federal Funds-H.15-1B-FLAT: 
+    currency: USD
+    base index: USD-Federal Funds-H.15-1B
+USD-Federal Funds-H.15-1B-CALIB: 
+    currency: USD
+    base index: USD-Federal Funds-H.15-1B
+USD-Federal Funds-H.15-CME-1B-FLAT: 
+    currency: USD
+    base index: USD-Federal Funds-H.15-CME-1B
+USD-Federal Funds-H.15-CME-1B-CALIB: 
+    currency: USD
+    base index: USD-Federal Funds-H.15-CME-1B
+USD-LIBOR-BBA-3M-FLAT:
+    currency: USD
+    base index: USD-LIBOR-BBA-3M
+USD-LIBOR-BBA-3M-CALIB:
+    currency: USD
+    base index: USD-LIBOR-BBA-3M
+USD-Term SOFR Base-1B-FLAT:
+    currency: USD
+    base index: USD-Term SOFR Base-1B
+USD-Term SOFR Base-1B-CALIB:
+    currency: USD
+    base index: USD-Term SOFR Base-1B
+CORRA-1B-FLAT: 
+    currency: CAD
+    base index: CORRA-1B
+CORRA-1B-CALIB: 
+    currency: CAD
+    base index: CORRA-1B
+CAD-BA-3M-FLAT:
+    currency: CAD
+    base index: CAD-BA-3M
+CAD-BA-3M-CALIB:
+    currency: CAD
+    base index: CAD-BA-3M
+SONIA-1B-FLAT: 
+    currency: GBP
+    base index: SONIA-1B
+SONIA-1B-CALIB: 
+    currency: GBP
+    base index: SONIA-1B
+GBP-LIBOR-BBA-3M-FLAT:
+    currency: GBP
+    base index: GBP-LIBOR-BBA-3M
+GBP-LIBOR-BBA-3M-CALIB:
+    currency: GBP
+    base index: GBP-LIBOR-BBA-3M
+GBP-LIBOR-BBA-6M-FLAT:
+    currency: GBP
+    base index: GBP-LIBOR-BBA-6M
+GBP-LIBOR-BBA-6M-CALIB:
+    currency: GBP
+    base index: GBP-LIBOR-BBA-6M
+EONIA-1B-FLAT: 
+    currency: EUR
+    base index: EONIA-1B
+EONIA-1B-CALIB: 
+    currency: EUR
+    base index: EONIA-1B
+EuroSTR-1B-FLAT: 
+    currency: EUR
+    base index: EuroSTR-1B
+EuroSTR-1B-CALIB: 
+    currency: EUR
+    base index: EuroSTR-1B
+EUR-EURIBOR-Telerate-3M-FLAT:
+    currency: EUR
+    base index: EUR-EURIBOR-Telerate-3M
+EUR-EURIBOR-Telerate-3M-CALIB:
+    currency: EUR
+    base index: EUR-EURIBOR-Telerate-3M
+EUR-EURIBOR-Telerate-6M-FLAT:
+    currency: EUR
+    base index: EUR-EURIBOR-Telerate-6M
+EUR-EURIBOR-Telerate-6M-CALIB:
+    currency: EUR
+    base index: EUR-EURIBOR-Telerate-6M
+AONIA-1B-FLAT: 
+    currency: AUD
+    base index: AONIA-1B
+AONIA-1B-CALIB: 
+    currency: AUD
+    base index: AONIA-1B
+AUD-LIBOR-BBA-3M-FLAT:
+    currency: AUD
+    base index: AUD-LIBOR-BBA-3M
+AUD-LIBOR-BBA-3M-CALIB:
+    currency: AUD
+    base index: AUD-LIBOR-BBA-3M
+TONA-1B-FLAT: 
+    currency: JPY
+    base index: TONA-1B
+TONA-1B-CALIB: 
+    currency: JPY
+    base index: TONA-1B
+JPY-LIBOR-BBA-3M-FLAT:
+    currency: JPY
+    base index: JPY-LIBOR-BBA-3M
+JPY-LIBOR-BBA-3M-CALIB:
+    currency: JPY
+    base index: JPY-LIBOR-BBA-3M
+### standalone funding
+USD-GOVT-BOND-FUNDING:
+    currency: USD
+CAD-GOVT-BOND-FUNDING:
+    currency: CAD
+GBP-GOVT-BOND-FUNDING:
+    currency: GBP
+EUR-BUND-GOVT-BOND-FUNDING:
+    currency: EUR
+EUR-OAT-GOVT-BOND-FUNDING:
+    currency: EUR
+AUD-GOVT-BOND-FUNDING:
+    currency: AUD
+JPY-GOVT-BOND-FUNDING:
+    currency: JPY

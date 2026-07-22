@@ -1,0 +1,451 @@
+### IBOR
+USD-LIBOR-BBA-1M:
+  type: IBOR INDEX
+  term: 1M
+  convention: USDLibor
+USD-LIBOR-BBA-3M:
+  type: IBOR INDEX
+  term: 3M
+  convention: USDLibor
+USD-LIBOR-BBA-6M:
+  type: IBOR INDEX
+  term: 6M
+  convention: USDLibor
+USD-LIBOR-BBA-1Y:
+  type: IBOR INDEX
+  term: 1Y
+  convention: USDLibor
+USD-TERM-SOFR-PROXY-1M:
+  type: IBOR INDEX
+  term: 1M
+  convention:
+    currency: USD
+    settlement offset: 2D
+    settlement holiday: USGS
+    accrual basis: Actual/360
+    payment businessday convention: F
+    payment holiday convention: USGS
+    end of month: true
+USD-TERM-SOFR-PROXY-3M:
+  type: IBOR INDEX
+  term: 3M
+  convention:
+    currency: USD
+    settlement offset: 2D
+    settlement holiday: USGS
+    accrual basis: Actual/360
+    payment businessday convention: F
+    payment holiday convention: USGS
+    end of month: true
+USD-TERM-SOFR-PROXY-6M:
+  type: IBOR INDEX
+  term: 6M
+  convention:
+    currency: USD
+    settlement offset: 2D
+    settlement holiday: USGS
+    accrual basis: Actual/360
+    payment businessday convention: F
+    payment holiday convention: USGS
+    end of month: true
+USD-TERM-SOFR-PROXY-1Y:
+  type: IBOR INDEX
+  term: 1Y
+  convention:
+    currency: USD
+    settlement offset: 2D
+    settlement holiday: USGS
+    accrual basis: Actual/360
+    payment businessday convention: F
+    payment holiday convention: USGS
+    end of month: true
+CAD-BA-1M:
+  type: IBOR INDEX
+  term: 1M
+  convention: CADLibor
+CAD-BA-3M:
+  type: IBOR INDEX
+  term: 3M
+  convention: CADLibor
+CAD-BA-6M:
+  type: IBOR INDEX
+  term: 6M
+  convention: CADLibor
+CAD-BA-1Y:
+  type: IBOR INDEX
+  term: 1Y
+  convention: CADLibor
+GBP-LIBOR-BBA-1M:
+  type: IBOR INDEX
+  term: 1M
+  convention: GBPLibor
+GBP-LIBOR-BBA-3M:
+  type: IBOR INDEX
+  term: 3M
+  convention: GBPLibor
+GBP-LIBOR-BBA-6M:
+  type: IBOR INDEX
+  term: 6M
+  convention: GBPLibor
+GBP-LIBOR-BBA-1Y:
+  type: IBOR INDEX
+  term: 1Y
+  convention: GBPLibor
+EUR-EURIBOR-Telerate-1M:
+  type: IBOR INDEX
+  term: 1M
+  convention: Euribor
+EUR-EURIBOR-Telerate-3M:
+  type: IBOR INDEX
+  term: 3M
+  convention: Euribor
+EUR-EURIBOR-Telerate-6M:
+  type: IBOR INDEX
+  term: 6M
+  convention: Euribor
+EUR-EURIBOR-Telerate-1Y:
+  type: IBOR INDEX
+  term: 1Y
+  convention: Euribor
+AUD-LIBOR-BBA-1M:
+  type: IBOR INDEX
+  term: 1M
+  convention: AUDLibor
+AUD-LIBOR-BBA-3M:
+  type: IBOR INDEX
+  term: 3M
+  convention: AUDLibor
+AUD-LIBOR-BBA-6M:
+  type: IBOR INDEX
+  term: 6M
+  convention: AUDLibor
+AUD-LIBOR-BBA-1Y:
+  type: IBOR INDEX
+  term: 1Y
+  convention: AUDLibor
+JPY-LIBOR-BBA-1M:
+  type: IBOR INDEX
+  term: 1M
+  convention: JPYLibor
+JPY-LIBOR-BBA-3M:
+  type: IBOR INDEX
+  term: 3M
+  convention: JPYLibor
+JPY-LIBOR-BBA-6M:
+  type: IBOR INDEX
+  term: 6M
+  convention: JPYLibor
+JPY-LIBOR-BBA-1Y:
+  type: IBOR INDEX
+  term: 1Y
+  convention: JPYLibor
+### Overnight Index
+# X-1B and X-1D are essentially the same type of overnight index
+# in theory, they should be identical
+# in practice, we allow them to diverge 
+# we will see how this helps when introducing composite index 
+SOFR-1B:
+  type: OVERNIGHT INDEX
+  convention: Sofr
+SOFR-CME-1B:
+  type: OVERNIGHT INDEX
+  convention: Sofr
+SOFR-1D:
+  type: OVERNIGHT INDEX
+  convention: Sofr
+SOFR-CME-1D :
+  type: OVERNIGHT INDEX
+  convention: Sofr
+USD-Federal Funds-H.15-1B:
+  type: OVERNIGHT INDEX
+  convention: FedFunds
+USD-Federal Funds-H.15-1D:
+  type: OVERNIGHT INDEX
+  convention: FedFunds
+USD-Federal Funds-H.15-CME-1B:
+  type: OVERNIGHT INDEX
+  convention: FedFunds
+USD-Federal Funds-H.15-CME-1D:
+  type: OVERNIGHT INDEX
+  convention: FedFunds
+USD-Term SOFR Base-1B:
+  type: OVERNIGHT INDEX
+  convention:
+    currency: USD
+    settlement offset: 0D
+    settlement holiday: USGS
+    accrual basis: Actual/360
+    payment businessday convention: F
+    payment holiday convention: USGS
+USD-Term SOFR Base-1D:
+  type: OVERNIGHT INDEX
+  convention:
+    currency: USD
+    settlement offset: 0D
+    settlement holiday: USGS
+    accrual basis: Actual/360
+    payment businessday convention: F
+    payment holiday convention: USGS
+CORRA-1B:
+  type: OVERNIGHT INDEX
+  convention: Corra
+CORRA-1D:
+  type: OVERNIGHT INDEX
+  convention: Corra
+SONIA-1B:
+  type: OVERNIGHT INDEX
+  convention: Sonia
+SONIA-1D:
+  type: OVERNIGHT INDEX
+  convention: Sonia
+EONIA-1B:
+  type: OVERNIGHT INDEX
+  convention: Eonia
+EONIA-1D:
+  type: OVERNIGHT INDEX
+  convention: Eonia
+EuroSTR-1B:
+  type: OVERNIGHT INDEX
+  convention: Estr
+EuroSTR-1D:
+  type: OVERNIGHT INDEX
+  convention: Estr
+AONIA-1B:
+  type: OVERNIGHT INDEX
+  convention: Aonia
+AONIA-1D:
+  type: OVERNIGHT INDEX
+  convention: Aonia
+TONA-1B:
+  type: OVERNIGHT INDEX
+  convention: Tonar
+TONA-1D:
+  type: OVERNIGHT INDEX
+  convention: Tonar
+### Composite Index
+# 1B => COMPOUND   => -COMPOUND
+#    => ARITHMETIC => -AVERAGE
+# 1D => ARITHMETIC => -AVG
+# The benefit of introducing 1D allows "inconsistency" between
+# COMPOUND and ARITHEMTIC
+USD-SOFR-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : SOFR-1B
+    compound method : COMPOUND
+USD-SOFR-CME-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : SOFR-CME-1B
+    compound method : COMPOUND
+USD-SOFR-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : SOFR-1B
+    compound method : ARITHMETIC
+USD-SOFR-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : SOFR-1D
+    compound method : ARITHMETIC
+USD-SOFR-CME-AVG : 
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : SOFR-CME-1D
+    compound method : ARITHMETIC
+USD-Term SOFR Base-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Term SOFR Base-1B
+    compound method : COMPOUND
+USD-Term SOFR Base-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Term SOFR Base-1B
+    compound method : ARITHMETIC
+USD-Term SOFR Base-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Term SOFR Base-1D
+    compound method : ARITHMETIC
+USD-Federal Funds-H.15-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Federal Funds-H.15-1B
+    compound method : COMPOUND
+USD-Federal Funds-H.15-CME-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Federal Funds-H.15-CME-1B
+    compound method : COMPOUND
+USD-Federal Funds-H.15-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Federal Funds-H.15-1B
+    compound method : ARITHMETIC
+USD-Federal Funds-H.15-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Federal Funds-H.15-1D
+    compound method : ARITHMETIC
+USD-Federal Funds-H.15-CME-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Federal Funds-H.15-CME-1B
+    compound method : ARITHMETIC
+USD-Federal Funds-H.15-CME-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : USD-Federal Funds-H.15-CME-1D
+    compound method : ARITHMETIC
+CAD-CORRA-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : CORRA-1B
+    compound method : COMPOUND
+CAD-CORRA-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : CORRA-1B
+    compound method : ARITHMETIC
+CAD-CORRA-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : CORRA-1D
+    compound method : ARITHMETIC
+GBP-SONIA-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : SONIA-1B
+    compound method : COMPOUND
+GBP-SONIA-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : SONIA-1B
+    compound method : ARITHMETIC
+GBP-SONIA-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : SONIA-1D
+    compound method : ARITHMETIC
+EUR-EONIA-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : EONIA-1B
+    compound method : COMPOUND
+EUR-EONIA-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : EONIA-1B
+    compound method : ARITHMETIC
+EUR-EONIA-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : EONIA-1D
+    compound method : ARITHMETIC
+EUR-EuroSTR-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : EuroSTR-1B
+    compound method : COMPOUND
+EUR-EuroSTR-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : EuroSTR-1B
+    compound method : ARITHMETIC
+EUR-EuroSTR-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : EuroSTR-1D
+    compound method : ARITHMETIC
+AUD-AONIA-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : AONIA-1B
+    compound method : COMPOUND
+AUD-AONIA-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : AONIA-1B
+    compound method : ARITHMETIC
+AUD-AONIA-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : AONIA-1D
+    compound method : ARITHMETIC
+JPY-TONA-COMPOUND:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : TONA-1B
+    compound method : COMPOUND
+JPY-TONA-AVERAGE:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : TONA-1B
+    compound method : ARITHMETIC
+JPY-TONA-AVG:
+  type: OVERNIGHT COMPOSITE INDEX
+  convention: 
+    index : TONA-1D
+    compound method : ARITHMETIC
+### FX
+GBP-USD:
+  type: FX INDEX
+  convention:
+    base currency: GBP
+    base businessday convention: F
+    base holidays: LON
+    base fixing offset: 2D
+    quoted currency: USD
+    quoted businessday convention: F
+    quoted holidays: LON,NYC
+    quoted fixing offset: 0D
+    premium currency: USD
+EUR-USD:
+  type: FX INDEX
+  convention:
+    base currency: EUR
+    base businessday convention: F
+    base holidays: TARGET
+    base fixing offset: 2D
+    quoted currency: USD
+    quoted businessday convention: F
+    quoted holidays: TARGET,NYC
+    quoted fixing offset: 0D
+    premium currency: USD
+AUD-USD:
+  type: FX INDEX
+  convention:
+    base currency: AUD
+    base businessday convention: F
+    base holidays: SYD
+    base fixing offset: 2D
+    quoted currency: USD
+    quoted businessday convention: F
+    quoted holidays: SYD,NYC
+    quoted fixing offset: 2D
+    premium currency: USD
+USD-CAD:
+  type: FX INDEX
+  convention:
+    base currency: USD
+    base businessday convention: F
+    base holidays: NYC
+    base fixing offset: 0D
+    quoted currency: CAD
+    quoted businessday convention: F
+    quoted holidays: NYC,TOR
+    quoted fixing offset: 1D
+    premium currency: CAD
+USD-JPY:
+  type: FX INDEX
+  convention:
+    base currency: USD
+    base businessday convention: F
+    base holidays: NYC
+    base fixing offset: 0D
+    quoted currency: JPY
+    quoted businessday convention: F
+    quoted holidays: NYC,TOK
+    quoted fixing offset: 2D
+    premium currency: JPY
