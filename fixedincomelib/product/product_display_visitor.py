@@ -293,7 +293,7 @@ class ProductDisplayVisitor(ProductVisitor):
         self.nvps_.append(["Notional", product.notional])
         self.nvps_.append(["Spread", product.spread])
         self.nvps_.append(["Basis Data Convention", product.basis_data_convention.name])
-        self.nvps_.append(["Reference Data Convention", product.basis_data_convention.name])
+        self.nvps_.append(["Reference Data Convention", product.reference_data_convention.name])
 
     @visit.register
     def _(self, product: ProductIBORZeroSpread):

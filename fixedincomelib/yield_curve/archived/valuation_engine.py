@@ -8,7 +8,11 @@ from fixedincomelib.date import Date, Period, TermOrDate
 from fixedincomelib.date.utilities import accrued
 from fixedincomelib.market.basics import AccrualBasis
 from fixedincomelib.market.data_conventions import CompoundingMethod
-from Untitled.fixedincomelib.market.interfaces import FundingIdentifier, IndexFixingsManager, IndexRegistry
+from Untitled.fixedincomelib.market.interfaces import (
+    FundingIdentifier,
+    IndexFixingsManager,
+    IndexRegistry,
+)
 from fixedincomelib.product.linear_products import (
     ProductBond,
     ProductFxForward,
@@ -18,13 +22,14 @@ from fixedincomelib.product.linear_products import (
 from fixedincomelib.product.utilities import LongOrShort, PayOrReceive
 from fixedincomelib.valuation.archived import *
 from fixedincomelib.product import (
-    ProductBulletCashflow, 
-    ProductRFRFuture, 
-    ProductOvernightIndexCashflow, 
-    ProductFixedAccrued, 
-    InterestRateStream, 
+    ProductBulletCashflow,
+    ProductRFRFuture,
+    ProductOvernightIndexCashflow,
+    ProductFixedAccrued,
+    InterestRateStream,
     ProductRFRSwap,
-    ProductCrossCurrencyBasisSwapNonMTM)
+    ProductCrossCurrencyBasisSwapNonMTM,
+)
 from fixedincomelib.valuation.valuation_engine import ValuationRequest
 from fixedincomelib.valuation.valuation_parameters import *
 from fixedincomelib.yield_curve.yield_curve_model import YieldCurve
@@ -1205,12 +1210,14 @@ class ValuationEngineProductFXForward(ValuationEngineProduct):
 
 
 class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct):
-    
-    def __init__(self, 
-                 model : YieldCurve, 
-                 valuation_parameters_collection : ValuationParametersCollection, 
-                 product : ProductCrossCurrencyBasisSwapNonMTM,
-                 request : ValuationRequest):
+
+    def __init__(
+        self,
+        model: YieldCurve,
+        valuation_parameters_collection: ValuationParametersCollection,
+        product: ProductCrossCurrencyBasisSwapNonMTM,
+        request: ValuationRequest,
+    ):
         super().__init__(model, valuation_parameters_collection, product, request)
 
         # get info from product
@@ -1228,12 +1235,14 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
         self.fx_spot_f_per_d_ = float(product.fx_spot_f_per_d_0)
         if self.fx_spot_f_per_d_ <= 0.0:
             raise ValueError("fx_spot_f_per_d_0 must be positive")
-        
+
         # resolve valuation parameters
-        self.vpc_ : ValuationParametersCollection = valuation_parameters_collection
+        self.vpc_: ValuationParametersCollection = valuation_parameters_collection
         assert self.vpc_.has_vp_type(FundingIndexParameter._vp_type)
-        self.funding_vp_ : FundingIndexParameter = self.vpc_.get_vp_from_build_method_collection(FundingIndexParameter._vp_type)
-        
+        self.funding_vp_: FundingIndexParameter = self.vpc_.get_vp_from_build_method_collection(
+            FundingIndexParameter._vp_type
+        )
+
         # In XCCY setting:
         # - default funding index is interpreted as the base/collateral-side funding
         # - currency-specific override is interpreted as the funding/component to be used by that specific leg
@@ -1245,16 +1254,10 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
         self.vpc_for_ = self._build_single_funding_vpc(self.for_funding_index_)
 
         self.dom_leg_engine_ = ValuationEngineInterestRateStream(
-            self.model_, 
-            self.vpc_dom_,
-            self.product_.domestic_leg, 
-            request
+            self.model_, self.vpc_dom_, self.product_.domestic_leg, request
         )
         self.for_leg_engine_ = ValuationEngineInterestRateStream(
-            self.model_, 
-            self.vpc_for_, 
-            self.product_.foreign_leg, 
-            request
+            self.model_, self.vpc_for_, self.product_.foreign_leg, request
         )
 
         self.nx_start_d_engine_ = None
@@ -1264,31 +1267,19 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
 
         if product.notional_exchange_start_d is not None:
             self.nx_start_d_engine_ = ValuationEngineProductBulletCashflow(
-                self.model_, 
-                self.vpc_dom_, 
-                self.product_.notional_exchange_start_d, 
-                request
+                self.model_, self.vpc_dom_, self.product_.notional_exchange_start_d, request
             )
         if product.notional_exchange_start_f is not None:
             self.nx_start_f_engine_ = ValuationEngineProductBulletCashflow(
-                self.model_, 
-                self.vpc_for_, 
-                self.product_.notional_exchange_start_f, 
-                request
+                self.model_, self.vpc_for_, self.product_.notional_exchange_start_f, request
             )
         if product.notional_exchange_end_d is not None:
             self.nx_end_d_engine_ = ValuationEngineProductBulletCashflow(
-                self.model_, 
-                self.vpc_dom_, 
-                self.product_.notional_exchange_end_d, 
-                request
+                self.model_, self.vpc_dom_, self.product_.notional_exchange_end_d, request
             )
         if product.notional_exchange_end_f is not None:
             self.nx_end_f_engine_ = ValuationEngineProductBulletCashflow(
-                self.model_, 
-                self.vpc_for_, 
-                self.product_.notional_exchange_end_f, 
-                request
+                self.model_, self.vpc_for_, self.product_.notional_exchange_end_f, request
             )
 
         self.pv_dom_leg_ = 0.0
@@ -1301,7 +1292,7 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
     @classmethod
     def val_engine_type(cls) -> str:
         return cls.__name__
-    
+
     def _build_single_funding_vpc(self, funding_index) -> ValuationParametersCollection:
         """
         Build a child valuation parameter collection containing only one funding index.
@@ -1312,13 +1303,13 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
 
         funding_index_name = funding_index.name()
 
-        vp_content = {
-            'Funding Index': funding_index_name
-        }
+        vp_content = {"Funding Index": funding_index_name}
         vp = FundingIndexParameter(vp_content)
         return ValuationParametersCollection([vp])
 
-    def _pv_engine_in_domestic_ccy(self, eng: ValuationEngineProduct, convert_from_foreign: bool) -> tuple[float, float]:
+    def _pv_engine_in_domestic_ccy(
+        self, eng: ValuationEngineProduct, convert_from_foreign: bool
+    ) -> tuple[float, float]:
         if eng is None:
             return 0.0, 0.0
         eng.calculate_value()
@@ -1345,14 +1336,20 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
         pv_nx_d, cash_nx_d = 0.0, 0.0
         pv_nx_f, cash_nx_f = 0.0, 0.0
 
-        pv, cash = self._pv_engine_in_domestic_ccy(self.nx_start_d_engine_, convert_from_foreign=False)
+        pv, cash = self._pv_engine_in_domestic_ccy(
+            self.nx_start_d_engine_, convert_from_foreign=False
+        )
         pv_nx_d += pv
         cash_nx_d += cash
-        pv, cash = self._pv_engine_in_domestic_ccy(self.nx_end_d_engine_, convert_from_foreign=False)
+        pv, cash = self._pv_engine_in_domestic_ccy(
+            self.nx_end_d_engine_, convert_from_foreign=False
+        )
         pv_nx_d += pv
         cash_nx_d += cash
 
-        pv, cash = self._pv_engine_in_domestic_ccy(self.nx_start_f_engine_, convert_from_foreign=True)
+        pv, cash = self._pv_engine_in_domestic_ccy(
+            self.nx_start_f_engine_, convert_from_foreign=True
+        )
         pv_nx_f += pv
         cash_nx_f += cash
         pv, cash = self._pv_engine_in_domestic_ccy(self.nx_end_f_engine_, convert_from_foreign=True)
@@ -1365,8 +1362,18 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
         self.pv_notional_dom_ = pv_nx_d
         self.pv_notional_for_dom_ccy_ = pv_nx_f
 
-        self.value_ = self.pv_dom_leg_ + self.pv_for_leg_dom_ccy_ + self.pv_notional_dom_ + self.pv_notional_for_dom_ccy_
-        self.cash_ = (self.sign_d_ * cash_dom_leg) + (self.sign_f_ * cash_for_leg_dom) + cash_nx_d + cash_nx_f
+        self.value_ = (
+            self.pv_dom_leg_
+            + self.pv_for_leg_dom_ccy_
+            + self.pv_notional_dom_
+            + self.pv_notional_for_dom_ccy_
+        )
+        self.cash_ = (
+            (self.sign_d_ * cash_dom_leg)
+            + (self.sign_f_ * cash_for_leg_dom)
+            + cash_nx_d
+            + cash_nx_f
+        )
 
         self.annuity_ = 0.0
         if self.basis_on_domestic_leg_:
@@ -1395,14 +1402,18 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
                     acc = idx.dayCounter().yearFraction(cf.effective_date, cf.termination_date)
                 else:
                     acc = 0.0
-            self.annuity_ += spread_leg_sign * cf.notional * acc * spread_leg_engine.dfs_[i] / fx_scaler
+            self.annuity_ += (
+                spread_leg_sign * cf.notional * acc * spread_leg_engine.dfs_[i] / fx_scaler
+            )
 
         if abs(self.annuity_) > 1.0e-14:
             self.par_rate_or_spread_ = self.basis_spread_ - self.value_ / self.annuity_
         else:
             self.par_rate_or_spread_ = self.basis_spread_
 
-    def calculate_first_order_risk(self, gradient=None, scaler: float = 1.0, accumulate: bool = False) -> None:
+    def calculate_first_order_risk(
+        self, gradient=None, scaler: float = 1.0, accumulate: bool = False
+    ) -> None:
         local_grad = []
         self.model_.resize_gradient(local_grad)
 
@@ -1418,14 +1429,22 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
 
         # notional exchanges risk: convert foreign notionals to domestic
         if self.nx_start_d_engine_ is not None:
-            self.nx_start_d_engine_.calculate_first_order_risk(local_grad, scaler=scaler, accumulate=True)
+            self.nx_start_d_engine_.calculate_first_order_risk(
+                local_grad, scaler=scaler, accumulate=True
+            )
         if self.nx_end_d_engine_ is not None:
-            self.nx_end_d_engine_.calculate_first_order_risk(local_grad, scaler=scaler, accumulate=True)
+            self.nx_end_d_engine_.calculate_first_order_risk(
+                local_grad, scaler=scaler, accumulate=True
+            )
 
         if self.nx_start_f_engine_ is not None:
-            self.nx_start_f_engine_.calculate_first_order_risk(local_grad, scaler=scaler / self.fx_spot_f_per_d_, accumulate=True)
+            self.nx_start_f_engine_.calculate_first_order_risk(
+                local_grad, scaler=scaler / self.fx_spot_f_per_d_, accumulate=True
+            )
         if self.nx_end_f_engine_ is not None:
-            self.nx_end_f_engine_.calculate_first_order_risk(local_grad, scaler=scaler / self.fx_spot_f_per_d_, accumulate=True)
+            self.nx_end_f_engine_.calculate_first_order_risk(
+                local_grad, scaler=scaler / self.fx_spot_f_per_d_, accumulate=True
+            )
 
         self.model_.resize_gradient(gradient)
         if accumulate:
@@ -1439,12 +1458,14 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
         this_cf = CashflowsReport()
         value_date = self.value_date
         fx = self.fx_spot_f_per_d_
-        
-        def _add_stream(stream: InterestRateStream,
-                        stream_engine: ValuationEngineInterestRateStream,
-                        leg_id: int,
-                        leg_sign: float,
-                        convert_foreign: bool):
+
+        def _add_stream(
+            stream: InterestRateStream,
+            stream_engine: ValuationEngineInterestRateStream,
+            leg_id: int,
+            leg_sign: float,
+            convert_foreign: bool,
+        ):
 
             n = stream.num_cashflows()
             dfs = getattr(stream_engine, "dfs_", [None] * n)
@@ -1470,7 +1491,9 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
                     notional_rep = cf.notional
                     payoff_rep = payoff
 
-                pv_rep = (df * payoff_rep) if (value_date is None or value_date <= pay_date) else 0.0
+                pv_rep = (
+                    (df * payoff_rep) if (value_date is None or value_date <= pay_date) else 0.0
+                )
 
                 start_date = cf.effective_date
                 end_date = cf.termination_date
@@ -1493,14 +1516,16 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
                     end_date=end_date,
                     accrued=accrued,
                     index_or_fixed=idx_label,
-                    index_value=fwd
+                    index_value=fwd,
                 )
 
-        def _add_bullet(bullet_prod: ProductBulletCashflow,
-                        bullet_engine: ValuationEngineProductBulletCashflow,
-                        leg_id: int,
-                        convert_foreign: bool,
-                        label: str):
+        def _add_bullet(
+            bullet_prod: ProductBulletCashflow,
+            bullet_engine: ValuationEngineProductBulletCashflow,
+            leg_id: int,
+            convert_foreign: bool,
+            label: str,
+        ):
 
             if bullet_prod is None or bullet_engine is None:
                 return
@@ -1523,7 +1548,7 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
                 forecast_rep = forecast
 
             pv_rep = (df * forecast_rep) if (value_date is None or value_date <= pay_date) else 0.0
-            sign = 1. if bullet_prod.long_or_short == LongOrShort.LONG else -1.
+            sign = 1.0 if bullet_prod.long_or_short == LongOrShort.LONG else -1.0
 
             this_cf.add_row(
                 leg_id=leg_id,
@@ -1540,9 +1565,9 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
                 end_date=None,
                 accrued=None,
                 index_or_fixed=label,
-                index_value=None
+                index_value=None,
             )
-        
+
         self.dom_leg_engine_.calculate_value()
         self.for_leg_engine_.calculate_value()
 
@@ -1552,7 +1577,7 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
             stream_engine=self.dom_leg_engine_,
             leg_id=1,
             leg_sign=self.sign_d_,
-            convert_foreign=False
+            convert_foreign=False,
         )
 
         # Leg 2: foreign stream
@@ -1561,7 +1586,7 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
             stream_engine=self.for_leg_engine_,
             leg_id=2,
             leg_sign=self.sign_f_,
-            convert_foreign=True
+            convert_foreign=True,
         )
 
         # Leg 3: domestic notionals
@@ -1570,14 +1595,14 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
             self.nx_start_d_engine_,
             leg_id=3,
             convert_foreign=False,
-            label="NX_START_DOM"
+            label="NX_START_DOM",
         )
         _add_bullet(
             self.product_.notional_exchange_end_d,
             self.nx_end_d_engine_,
             leg_id=3,
             convert_foreign=False,
-            label="NX_END_DOM"
+            label="NX_END_DOM",
         )
 
         # Leg 4: foreign notionals
@@ -1586,18 +1611,18 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
             self.nx_start_f_engine_,
             leg_id=4,
             convert_foreign=True,
-            label="NX_START_FOR"
+            label="NX_START_FOR",
         )
         _add_bullet(
             self.product_.notional_exchange_end_f,
             self.nx_end_f_engine_,
             leg_id=4,
             convert_foreign=True,
-            label="NX_END_FOR"
+            label="NX_END_FOR",
         )
 
         return this_cf
-    
+
     def get_value_and_cash(self) -> PVCashReport:
         report = PVCashReport(self.currency_)
         report.set_pv(self.currency_, self.value_)
@@ -1605,11 +1630,11 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
         return report
 
     def par_rate_or_spread(self) -> float:
-         return self.par_rate_or_spread_
-    
+        return self.par_rate_or_spread_
+
     def pv01(self) -> float:
         return self.annuity_
-    
+
     def grad_at_par(self):
         local_grad = []
         self.model_.resize_gradient(local_grad)
@@ -1620,11 +1645,7 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
         # s = s_trade - V / A
         # grad s = -1/A * grad V + V / A^2 * grad A
         # first term: -1 / A * grad V
-        self.calculate_first_order_risk(
-            local_grad,
-            scaler=-1. / self.annuity_,
-            accumulate=True
-        )
+        self.calculate_first_order_risk(local_grad, scaler=-1.0 / self.annuity_, accumulate=True)
 
         # second term: V / A^2 * grad A
         if self.basis_on_domestic_leg_:
@@ -1659,8 +1680,13 @@ class ValuationEngineProductCrossCurrencyBasisSwapNonMTM(ValuationEngineProduct)
                 funding_index,
                 pay_date,
                 local_grad,
-                scaler=self.value_ / (self.annuity_ * self.annuity_) * spread_leg_sign * cf.notional * acc / fx_scaler,
-                accumulate=True
+                scaler=self.value_
+                / (self.annuity_ * self.annuity_)
+                * spread_leg_sign
+                * cf.notional
+                * acc
+                / fx_scaler,
+                accumulate=True,
             )
 
         return local_grad
@@ -1880,53 +1906,76 @@ class ValuationEngineProductBond(ValuationEngineProduct):
 
 
 ### register
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                           ProductBulletCashflow._product_type,
-                                           AnalyticValParam._vp_type), 
-                                           ValuationEngineProductBulletCashflow)
+ValuationEngineProductRegistry().register(
+    (
+        YieldCurve._model_type.to_string(),
+        ProductBulletCashflow._product_type,
+        AnalyticValParam._vp_type,
+    ),
+    ValuationEngineProductBulletCashflow,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                           ProductRFRFuture._product_type,
-                                           AnalyticValParam._vp_type), 
-                                           ValuationEngineProductRfrFuture)
+ValuationEngineProductRegistry().register(
+    (YieldCurve._model_type.to_string(), ProductRFRFuture._product_type, AnalyticValParam._vp_type),
+    ValuationEngineProductRfrFuture,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                          InterestRateStream._product_type,
-                                          AnalyticValParam._vp_type), 
-                                          ValuationEngineInterestRateStream)
+ValuationEngineProductRegistry().register(
+    (
+        YieldCurve._model_type.to_string(),
+        InterestRateStream._product_type,
+        AnalyticValParam._vp_type,
+    ),
+    ValuationEngineInterestRateStream,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                          ProductRFRSwap._product_type,
-                                          AnalyticValParam._vp_type), 
-                                          ValuationEngineProductRfrSwap)
+ValuationEngineProductRegistry().register(
+    (YieldCurve._model_type.to_string(), ProductRFRSwap._product_type, AnalyticValParam._vp_type),
+    ValuationEngineProductRfrSwap,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                          ProductOvernightIndexBasisSwap._product_type,
-                                          AnalyticValParam._vp_type), 
-                                          ValuationEngineProductOvernightIndexBasisSwap)
+ValuationEngineProductRegistry().register(
+    (
+        YieldCurve._model_type.to_string(),
+        ProductOvernightIndexBasisSwap._product_type,
+        AnalyticValParam._vp_type,
+    ),
+    ValuationEngineProductOvernightIndexBasisSwap,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                          ProductZeroSpread._product_type,
-                                          AnalyticValParam._vp_type), 
-                                          ValuationEngineProductZeroSpread)
+ValuationEngineProductRegistry().register(
+    (
+        YieldCurve._model_type.to_string(),
+        ProductZeroSpread._product_type,
+        AnalyticValParam._vp_type,
+    ),
+    ValuationEngineProductZeroSpread,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                          ProductFxForward._product_type,
-                                          AnalyticValParam._vp_type), 
-                                          ValuationEngineProductFXForward)
+ValuationEngineProductRegistry().register(
+    (YieldCurve._model_type.to_string(), ProductFxForward._product_type, AnalyticValParam._vp_type),
+    ValuationEngineProductFXForward,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                          ProductCrossCurrencyBasisSwapNonMTM._product_type,
-                                          AnalyticValParam._vp_type), 
-                                          ValuationEngineProductCrossCurrencyBasisSwapNonMTM)
+ValuationEngineProductRegistry().register(
+    (
+        YieldCurve._model_type.to_string(),
+        ProductCrossCurrencyBasisSwapNonMTM._product_type,
+        AnalyticValParam._vp_type,
+    ),
+    ValuationEngineProductCrossCurrencyBasisSwapNonMTM,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(),
-                                           ProductFixedAccrued._product_type,
-                                           AnalyticValParam._vp_type),
-                                          ValuationEngineProductFixedAccrued)
+ValuationEngineProductRegistry().register(
+    (
+        YieldCurve._model_type.to_string(),
+        ProductFixedAccrued._product_type,
+        AnalyticValParam._vp_type,
+    ),
+    ValuationEngineProductFixedAccrued,
+)
 
-ValuationEngineProductRegistry().register((YieldCurve._model_type.to_string(), 
-                                           ProductBond._product_type, 
-                                           AnalyticValParam._vp_type),
-                                          ValuationEngineProductBond)
-
+ValuationEngineProductRegistry().register(
+    (YieldCurve._model_type.to_string(), ProductBond._product_type, AnalyticValParam._vp_type),
+    ValuationEngineProductBond,
+)

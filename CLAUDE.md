@@ -38,13 +38,24 @@ submodule imports (`from fixedincomelib.valuation.valuation_parameters import
 ValuationParametersCollection`). Same for `fixedincomelib.yield_curve.valuation_engine_analytics` —
 it exists but isn't pulled into `yield_curve/__init__.py`, so callers import it directly.
 
-Registry-based valuation-engine dispatch (`ValuationEngineProductRegistry`,
-`ValuationEngineAnalyticIndexRegistry` in `fixedincomelib/valuation/valuation_engine_registry.py`)
-is **entirely commented out** — scaffolding for a dispatch-by-`(model_type, product_type, vp_type)`
-design that isn't wired up. The pattern that actually works today: callers construct the concrete
-`ValuationEngineAnalytics*` subclass directly (e.g.
-`ValuationEngineAnalyticsCompoundIborIndex(model, anchored_index, vpc)`). Don't assume the registry
-dispatch path is live without checking whether it's still commented out.
+`ValuationEngineProductRegistry` (`fixedincomelib/valuation/valuation_engine_registry.py`) — dispatch
+by `(model.model_type, product.product_type, vp_type)` to a `ValuationEngineProduct` subclass, via
+`ValuationEngineProductRegistry().new_valuation_engine(model, product, vpc, request)` — **is now
+live**, not commented out (corrected from an earlier version of this note; re-verify against the
+file before trusting either state, since this has flipped once already). Every `ValuationEngineProduct*`
+class in `fixedincomelib/yield_curve/valuation_engine.py` registers itself at module load time (see
+the `### Registry` block at the bottom of that file) and `ValuationEngineProductPortfolio`
+(`fixedincomelib/valuation/valuation_engine_portfolio.py`) dispatches to its children through this
+registry. Only product types with both a `ProductBuilderRegistry` entry (`product/product_factory.py`)
+and a `ValuationEngineProductRegistry` entry are reachable generically — e.g. `DataConventionSwap`
+(`"SWAP"`) has no registered `ProductBuilderRegistry` builder today, so `ProductFactory.
+create_product_from_data_convention` raises `KeyError` for it despite `DataConventionSwap` itself
+existing; check both registries before assuming a given data-convention/product type is usable via
+generic dispatch. `ValuationEngineAnalyticIndexRegistry`, by contrast, genuinely **is** still
+commented out (`yield_curve/valuation_engine_analytics.py`) — the pattern for that lower
+(anchored-index) layer really is still "construct the concrete `ValuationEngineAnalytics*` subclass
+directly" (e.g. `ValuationEngineAnalyticsCompoundIborIndex(model, anchored_index, vpc)`). Don't
+conflate the two registries — one is live, the other isn't.
 
 ### Registry pattern (singleton)
 
@@ -219,7 +230,27 @@ an overnight index and the other IBOR.
 `ValuationEngineProductOvernightIndexFuture` (`fixedincomelib/yield_curve/valuation_engine.py`) is
 the first live (non-archived, non-stub) `ValuationEngineProduct` built directly on the torch-based
 anchored-index engines rather than the old numpy `calculate_risk`/`resize_gradient` path — a
-pattern worth reusing for the next product engine:
+pattern worth reusing for the next product engine. It was later rewritten to wrap
+`ValuationEngineProductOvernightIndexCompositeCashflow` instead of building its own
+`AnchoredOvernightIndex`/`ValuationEngineAnalyticsCompositeIndex` pair by hand — this works because
+`ProductOvernightIndexFuture` *is itself* a `ProductOvernightIndexCompositeCashflow` (`pay_or_rec
+=RECEIVE`, `spread=0.`, `leverage=1.`, see its constructor in `product/linear_products.py`), so the
+future's own `product` object can be passed straight through as the composite-cashflow engine's
+`product` argument. Only `forward_rate_` off the wrapped engine is used — the future's `.value_`
+(`notional * (F - K)`, undiscounted, since a margined instrument isn't present-valued) and `.cash_`
+(daily variation margin) are computed independently on top, same as before. Two consequences of the
+reuse worth flagging: (1) it pulls the compounding business-day-convention/calendar from
+`on_composite_index.business_day_conv`/`.payment_holiday_conv` (the *index's* own convention) rather
+than the product's `payment_business_day_convention`/`payment_holiday_convention` the hand-rolled
+version used — a deliberate behavior change, and arguably more correct (one source of truth for
+compounding conventions, matching how a swap's floating leg already does it), but worth knowing if a
+future's price shifts slightly after this rewrite; (2) constructing
+`ValuationEngineProductOvernightIndexCompositeCashflow` unconditionally asserts a
+`FundingIndexParameter` is present in the vpc (even though the future never uses its discounted
+value) — futures now require a funding parameter for their currency that they didn't strictly need
+before. The original from-scratch pattern below is still accurate at the
+`ValuationEngineAnalytics*` layer (that's exactly what the composite-cashflow engine builds
+internally) — just no longer duplicated at the product-engine layer for the future specifically:
 
 - Build one `AnchoredOvernightIndex`/`AnchoredIborIndex`/`AnchoredCompoundIborIndex` (whichever
   fits) plus its matching `ValuationEngineAnalytics*` once in `__init__`, off the product's own
@@ -250,7 +281,13 @@ pattern worth reusing for the next product engine:
   the *same* model/curve and directly overwriting its `.value_date_` attribute to one business day
   earlier, without needing a second curve build. This only reprices the known-vs-forward fixing
   cutoff a day earlier on today's curve, not a true historical curve snapshot — the best available
-  proxy given the codebase keeps no time series of prior curve builds.
+  proxy given the codebase keeps no time series of prior curve builds. Since the rewrite, this
+  attribute lives one layer deeper than it looks: build a second
+  `ValuationEngineProductOvernightIndexCompositeCashflow` and overwrite *its*
+  `index_engine_.value_date_` (the nested `ValuationEngineAnalyticsCompositeIndex`'s own
+  attribute) — overwriting the outer product-engine's `.value_date_` instead is a no-op for this
+  purpose, since that outer attribute only gates its own (here-unused, since the future never reads
+  the wrapped engine's `.value_`/`.cash_`) discounting branch.
 
 `ValuationEngineProductFRAOrFixing` follows the same base pattern but is a discounted single
 cashflow rather than a margined instrument, which changes a few things:
@@ -262,13 +299,38 @@ cashflow rather than a margined instrument, which changes a few things:
 - `ProductFRAOrFixing` covers two distinct payoff shapes off one `payment_date_ vs
   termination_date_` comparison, driven entirely by what `pay_date_or_offset` the caller passed in
   (there's no separate boolean field): if `payment_date_ < termination_date_` it's a *true* FRA,
-  settling early with the standard `1 / (1 + d*tau)` early-settlement discount factor (`d` = the
-  floating rate under `"ISDA"`, the fixed coupon under `"AFMA"`); if they're equal (the default —
-  `pay_date_or_offset` defaults to `TermOrDate("0D")`, which resolves to `termination_date_`), it's
-  a plain fixing/coupon cashflow with no such adjustment.
-- Picks `AnchoredIborIndex` + `ValuationEngineAnalyticsIborIndex` or `AnchoredOvernightIndex` +
-  `ValuationEngineAnalyticsCompositeIndex` off `product.is_on` (`ProductCashflow` already derives
-  this from `isinstance(index_, OvernightIndex)`), since `ProductFRAOrFixing.index` can be either.
+  settling early with the standard ISDA `1 / (1 + F*tau)` early-settlement discount factor (`F` =
+  the floating rate); if they're equal (the default — `pay_date_or_offset` defaults to
+  `TermOrDate("0D")`, which resolves to `termination_date_`), it's a plain fixing/coupon cashflow
+  with no such adjustment. **Only ISDA discounting is implemented** — `__init__` asserts
+  `product.fra_discounting_style.upper() == "ISDA"` (AFMA, which discounts at the fixed coupon
+  instead of the floating rate, isn't needed yet; `qfCreateProductFRA` already only ever produces
+  ISDA FRAs, so this doesn't constrain any live call path). Don't re-add an AFMA branch without
+  being asked — if it's needed later, the discount factor is `1 / (1 + coupon_*tau)` instead of
+  `1 / (1 + forward_rate_*tau)`.
+- Picks `AnchoredOvernightIndex` + `ValuationEngineAnalyticsCompositeIndex` by hand for the ON
+  branch (`product.is_on` — `ProductCashflow` already derives this from
+  `isinstance(index_, OvernightIndex)`), since `ProductFRAOrFixing.index` can be either an
+  `OvernightIndex` or an `IBORIndex`. For the IBOR branch, though,
+  `ProductFRAOrFixing` *is* a `ProductIBORIndexCashflow` (its base class), so its own `product`
+  object is handed straight to `ValuationEngineProductIBORIndexCashflow` instead of re-deriving an
+  `AnchoredIborIndex`/`ValuationEngineAnalyticsIborIndex` pair by hand — same reuse pattern as
+  `ValuationEngineProductOvernightIndexFuture` wrapping
+  `ValuationEngineProductOvernightIndexCompositeCashflow`. Only the wrapped engine's
+  `forward_rate_` is read; its own discounted `.value_`/`.cash_` are ignored in favor of the FRA's
+  early-settlement-adjusted discounting above. Unlike the future's rewrite, this introduces **no**
+  behavior change: `ProductFRAOrFixing.__init__` already sets
+  `payment_business_day_convention`/`payment_holiday_convention` straight from
+  `index.payment_business_day_conv`/`index.payment_holiday_conv`, the same source
+  `ValuationEngineProductIBORIndexCashflow` itself reads — so there was no product-level-vs-
+  index-level convention mismatch to worry about here (unlike the OI future, where the two sources
+  actually differ). The ON branch has no equivalent natural reuse target: `ProductFRAOrFixing`
+  only carries a raw `OvernightIndex` there, not an `OvernightCompositeIndex`, so there's no
+  product-level composite-cashflow object to delegate to without first constructing a synthetic one
+  — judged not worth the indirection, so that branch is left building
+  `AnchoredOvernightIndex`/`ValuationEngineAnalyticsCompositeIndex` by hand.
+- `ValuationEngineProductCashDeposit` has no index at all (see further below) and nothing
+  analogous to reuse from either the future or FRA rewrites — reviewed, no change needed there.
 - `pv01()`/`grad_at_par()` fall back to `0.0`/`get_gradient(reset=False)` (not a nonzero closed
   form) once `forward_rate_` has no live graph, unlike the future — here PV is *not* affine in `F`
   once the FRA early-settlement adjustment is in play, and a fully-realized (historical-fixing) FRA
@@ -296,6 +358,328 @@ overnight-index swap is made of) — structurally the overnight-index analogue o
 `payment_date_`, payoff `sign * notional * tau * (forward_rate_ + spread)`. `par_rate_or_spread()`
 returns `forward_rate_` (the raw compounded rate, not a rate net of `spread`) and `pv01()`/
 `grad_at_par()` are exact closed forms off `forward_rate_`'s graph, same pattern as the FRA.
+
+`ValuationEngineProductOvernightIndexSwap` (`fixedincomelib/yield_curve/valuation_engine.py`) is the
+first engine to wrap two whole legs (`ProductInterestRateStream`) rather than one atomic cashflow —
+the pattern reused for `ValuationEngineProductOvernightIndexBasisSwap` and
+`ValuationEngineProductOISBasisSwap` right below it (see further down), all three living in the same
+file in that order:
+- `ProductOvernightIndexSwap.fixed_leg`/`.floating_leg` already carry opposite `pay_or_rec` (the
+  floating leg is built with `PayOrReceive.reverse(pay_or_rec)` — see the product constructor), and
+  each underlying per-period cashflow engine's own `sign_` is derived from its leg's `pay_or_rec`.
+  That means the two leg engines' `.value_`/`.cash_` are **already sign-consistent** and can just be
+  added (`fixed_leg_engine_.value_ + floating_leg_engine_.value_`) — no separate
+  `fixed_leg_sign_`/`floating_leg_sign_` multiplication on top, unlike the archived numpy-risk
+  `ValuationEngineProductRfrSwap` (`yield_curve/archived/valuation_engine.py`), which needed that
+  extra sign layer because its leg engine wasn't leg-direction-aware on its own.
+- Each leg is built as a `ValuationEngineProductInterestRateStream` directly (constructed in
+  `__init__` off `product.fixed_leg`/`product.floating_leg`), not via
+  `ValuationEngineProductRegistry().new_valuation_engine(...)` — `ProductOvernightIndexSwap` itself
+  isn't a `ProductPortfolio` (no `.elements_`), so it can't inherit `ValuationEngineProductPortfolio`
+  the way `ValuationEngineProductInterestRateStream` does; it's a plain `ValuationEngineProduct`
+  holding two named sub-engines instead of a list.
+- **Risk**: `get_risk` is overridden (not left to the base class's single-tensor autograd default)
+  because `value_` is a Python-float/tensor sum whose two addends' graphs are independently owned by
+  each leg engine — accumulate via `leg_engine.get_risk(gradient=leg_grad)` into a shared
+  `np.zeros_like(...)` array per leg, same idiom `ValuationEngineProductPortfolio.get_risk` already
+  uses for N children, just unrolled for 2 named legs instead of a loop over `self.engines_`.
+- **Par rate**: since the floating leg carries no dependency on the fixed rate (`spread=0` on the
+  floating leg, coupon lives only on the fixed leg), swap PV is exactly affine in `fixed_rate`:
+  `PV(fixed_rate) = floating_leg.value_ + fixed_rate * fixed_leg_engine_.annuity_` (the fixed leg's
+  own `annuity_`, as already computed by `ValuationEngineProductInterestRateStream.calculate_value`,
+  is precisely `d(PV_fixed_leg)/d(fixed_rate)`). Solving `PV(par) = 0` gives
+  `par_rate_or_spread() = fixed_rate_ - value_ / fixed_leg_engine_.annuity_` — same
+  `rate - value/annuity` identity `ValuationEngineProductInterestRateStream.par_rate_or_spread` uses
+  for a single leg, just applied against the swap's total (both-legs) PV. `pv01()` is
+  `fixed_leg_engine_.annuity_ * 1e-4`, again reusing the fixed leg's own annuity rather than
+  re-deriving one at the swap level. Verified end to end against a synthetic flat SOFR curve: PV at
+  the computed `par_rate_or_spread()` is ~1e-11 (zero to floating-point precision). No
+  `grad_at_par()` — not needed for a swap used as a valuation target rather than a calibration
+  instrument.
+
+`ValuationEngineProductOvernightIndexBasisSwap` is the float-vs-float sibling, immediately below the
+fixed-vs-float engine in the same file — `ProductOvernightIndexBasisSwap.on_composite_index_leg`
+(ON composite, carries the quoted `spread`) vs. `.ibor_index_leg` (IBOR, `fixed_rate_or_spread=0.`,
+`leverage=1.`, see the product constructor). Structurally identical wrap-two-
+`ValuationEngineProductInterestRateStream`-legs pattern, with one substitution: there's no "fixed
+leg" here, so the **on-composite leg stands in for it** in the par/pv01 math, because it's the only
+leg whose payoff depends on the quantity being solved for (the spread). This works because
+`ValuationEngineProductOvernightIndexCompositeCashflow`'s payoff,
+`sign * notional * tau * (leverage * forward_rate + spread)`, has `spread` entering with exactly the
+same coefficient shape (`sign * notional * tau`, then `* df`) that `ValuationEngineProductFixedAccrued`
+gives `coupon` — so `ValuationEngineProductInterestRateStream.annuity_` (generic across whichever
+atomic engine type populates `self.engines_`) is `d(PV_on_leg)/d(spread)` on the on-composite leg
+exactly as it was `d(PV_fixed_leg)/d(fixed_rate)` on the fixed leg. `par_rate_or_spread()` and
+`pv01()` are therefore the same two formulas as the fixed-vs-float engine, verbatim, with
+`fixed_rate_`/`fixed_leg_engine_` swapped for `spread_`/`on_leg_engine_`. `get_risk` and
+`create_cash_flows_report` follow the identical two-leg-accumulation shape. Verified end to end
+against a synthetic SOFR + flat-LIBOR-3M curve (quarterly accrual, 2Y, 8 periods/leg): PV at the
+computed `par_rate_or_spread()` is exactly `0.`, and `get_risk` produces nonzero gradient entries
+across all three curve components (SOFR-1B, SOFR-1B-FLAT, LIBOR-3M).
+
+`ValuationEngineProductOISBasisSwap` is float-vs-float again, but both legs are overnight composite
+indices this time — `ProductOISBasisSwap.basis_leg` (carries the quoted `spread`) vs.
+`.reference_leg` (`fixed_rate_or_spread=0.`). Identical to
+`ValuationEngineProductOvernightIndexBasisSwap` in every respect except naming
+(`basis_leg`/`reference_leg` in place of `on_composite_index_leg`/`ibor_index_leg`,
+`basis_leg_engine_`/`reference_leg_engine_` in place of `on_leg_engine_`/`ibor_leg_engine_`) — the
+basis leg stands in for the "fixed leg" in the `par_rate_or_spread()`/`pv01()` formulas for the same
+reason (it's the only leg whose payoff depends on `spread`), since both legs are
+`ValuationEngineProductOvernightIndexCompositeCashflow`-backed and the annuity/coefficient argument
+doesn't care which atomic engine type populates `self.engines_`. Verified end to end against a
+synthetic SOFR + flat-Fed-Funds curve (quarterly, 2Y, 8 periods/leg, basis leg = SOFR compound pay,
+reference leg = Fed Funds compound receive): PV at the computed `par_rate_or_spread()` is ~1e-11
+(zero to floating-point precision), `get_risk` produces nonzero gradients across all three curve
+components (SOFR-1B, SOFR-1B-FLAT, USD-FEDERAL FUNDS-H.15-1B).
+
+`ValuationEngineProductGenericSpread` prices `ProductGenericSpread` — a spread between a "target"/basis
+instrument T (`product.basis_data_convention`) and a "reference" instrument R
+(`product.reference_data_convention`), where T and R can be *any* two data-convention-driven
+instrument types (a swap vs. a deposit, a FRA vs. an OIS, ...), not just two legs of one known
+product shape. This is architecturally different from every engine above it in the file: those all
+combine legs that are already the *same* atomic-cashflow-engine family (so their PVs can just be
+summed on one shared torch graph); a generic spread's T and R may go through entirely unrelated
+`ValuationEngineProduct` subclasses with no common graph to sum. It follows the Felix model doc's
+"generic spread" construction (RBC internal model doc §6.4.9, provided by the user as reference,
+not checked into the repo): T is assumed coupon 0, R is assumed coupon `-spread`, T and R pay
+opposite sides (`ProductFactory.create_generic_spread` already encodes basis=target/T,
+reference=R), R's notional stands for 1 unit of the trade (scaled by `product.notional`), and T's
+notional is implicitly DV01-matched to R via `PV01_r/PV01_t`.
+1. Builds T (coupon `0.`) and R (coupon `-product.spread`) as real `Product` instances via
+   `ProductFactory.create_product_from_data_convention`, over the trade's own
+   `effective_date`/`termination_date` expressed as an explicit `"YYYY-MM-DD x YYYY-MM-DD"` axis1
+   string — this bypasses each data convention's own settlement-offset resolution (see
+   `_tokenize_axis1`'s cross-axis branch), so the trade's actual schedule gets priced rather than a
+   re-derived tenor. Neither build passes a `pay_or_rec` kwarg, so both build under whichever side
+   that data convention's factory method defaults to (every one checked in this file defaults to
+   `"receive"`) — T and R therefore land on the *same* side; the opposite-sides relationship from doc
+   assumption 3 is instead encoded as a minus sign in the PV formula, not a build-time difference.
+2. Dispatches both through `ValuationEngineProductRegistry().new_valuation_engine(...)` — meaning a
+   generic spread can only be built from data conventions whose product type has both a
+   `ProductBuilderRegistry` entry and a `ValuationEngineProductRegistry` entry (see the import-surface
+   note above for a concrete gap: plain `DataConventionSwap` has neither wired up as of this writing).
+3. Reads each engine's **raw `.value`/`.pv01()` directly** — deliberately *not* each engine's
+   `par_rate_or_spread()` — and combines them as
+   `value_ = sign * scale * Fx * (R.value - ratio * T.value)`, where `scale = notional /
+   reference_built_notional` (projects R's own natural build notional onto "R notional = 1 unit of
+   this trade"), `ratio = R.pv01() / T.pv01()` (a plain float ratio of the two engines' own reported
+   PV01s — this *is* the `PV01_r/PV01_t` DV01-matching ratio; it needs no separate per-unit
+   normalization since both PV01s already come from the same `.pv01()` contract), and `Fx` converts
+   R's currency into `product.currency`. `sign` comes from `product.pay_or_rec`. This works because
+   PV(coupon) is affine in an engine's own coupon for every linear-rate engine in this file, so T's
+   DV01-matched contribution reduces to exactly `ratio * T.value` with no need to ever recover `p_t`
+   separately — and since R is already built at the real coupon `-spread`, `p_r` and `spread` never
+   need to be extracted either; `spread` only enters via the coupon R was built at. The minus sign in
+   front of `ratio * T.value` is what encodes T and R being on opposite sides (see point 1). A single
+   `Fx = fx(reference_ccy -> product.currency)` factor covers *both* legs' currency conversion — but
+   only because `__init__` now asserts `target_currency_.code() == reference_currency_.code()`
+   (`self.target_currency_ = target_product.currency`, captured but otherwise unused besides this
+   check). Without that assertion this is **not** a general FX triangulation: `ratio = R.pv01() /
+   T.pv01()` is a bare division of two PV01s with no FX adjustment between T's and R's own
+   currencies, so if they ever differed, `ratio * T.value` would carry an un-corrected T-ccy/R-ccy
+   quantity that the single R-ccy-based `Fx` factor would not fix. Asserting same-currency (rather
+   than adding a real T-ccy -> R-ccy conversion into `ratio` itself) was the chosen fix, raised and
+   confirmed in review, since nothing in this codebase currently needs a genuinely
+   cross-currency generic spread — fail loudly instead of silently mispricing one. Old version of
+   this engine computed `p_t`, `p_r` via `par_rate_or_spread()` and
+   combined them with `spread` explicitly instead; this formulation is mathematically identical
+   (cross-checked to agree to float precision on the same fixture, see below) but reads more directly
+   off what every `ValuationEngineProduct` already reports (`.value`/`.pv01()`), rather than trusting
+   each engine's own possibly-bespoke `par_rate_or_spread()` implementation.
+- **This makes `value_` a plain Python float, not a live torch tensor** — `.value`/`.pv01()` are read
+  and combined via plain-float `ratio`/`scale`/`Fx` multipliers, which detaches the result even
+  though `.value` itself is a live tensor on each sub-engine. There is therefore no autograd graph to
+  chain through T's and R's own curve sensitivity. `get_risk()` is deliberately left at the
+  `ValuationEngineProduct` default rather than overridden with a fake implementation — since
+  `value_` isn't a tensor, that default skips `.backward()` and returns whatever's already on the
+  model's gradient accumulator. **Curve risk for a generic spread is not currently supported**, only
+  PV/par-rate/pv01 reporting; a real implementation would need a `grad_at_par()`-style live-graph par
+  rate (or a live-graph `.value`/`.pv01()` combination) on every engine T/R might resolve to, which
+  nothing in this codebase provides yet (the one sketch of it, on
+  `ValuationEngineProductInterestRateStream`, is itself commented out).
+- `par_rate_or_spread()`/`pv01()` on the generic-spread engine itself follow the same `rate -
+  value/sensitivity` idiom as the other spread/basis engines in this file
+  (`spread_ - value_/spread_pv01_unit_`, `spread_pv01_unit_*1e-4`), with `spread_pv01_unit_ =
+  -sign_*scale_*fx_*reference_pv01_raw/1e-4` derived from `d(value_)/d(spread_)` (only R's build
+  coupon depends on `spread_`) — named `spread_pv01_unit_` rather than `annuity_` (the name every
+  sibling engine uses for this same slot) because it isn't a discounted-cashflow-sum annuity the
+  way e.g. `ValuationEngineProductInterestRateStream.annuity_` is; it's R's own `pv01()` rescaled
+  onto the spread axis by `sign_`/`scale_`/`fx_`. Renamed from an initial `annuity_` at the user's
+  request once this distinction was raised.
+- Verified end to end against a synthetic SOFR-1B / USD-Federal-Funds-H.15-1B curve, spreading
+  `USD-SOFR-OIS` (target) against `USD-OIS` (reference, Fed Funds) over 5Y: `target_engine_.
+  par_rate_or_spread()` matched a standalone `ValuationEngineProductOvernightIndexSwap` built off the
+  same convention/dates exactly; PV at the computed `par_rate_or_spread()` was exactly `0.`; the two
+  `create_cash_flows_report()` rows summed to `value_` exactly; and this PV/PV01-based formulation's
+  `value_`/`pv01()`/`par_rate_or_spread()` matched the earlier par-rate-based formulation to float
+  precision on the same fixture.
+
+`ValuationEngineProductGenericForward` prices `ProductGenericForward` — an implied-forward instrument:
+`PV = sign * notional * (F - K) * tau * DF_funding(payment_date)`, where `F` is the curve-implied
+forward rate of `product.index` over `[effective_date, termination_date]`, read directly off the
+ratio of that index's own discount factors at the two dates rather than through an
+`AnchoredIborIndex`/`AnchoredOvernightIndex` + `ValuationEngineAnalytics*` pair the way every other
+forward-rate-driven engine in this file is — a "generic forward" isn't anchored to any particular
+index's own native accrual/compounding convention, it just reads whatever `product.index` resolves
+to on the model (IBOR, overnight, or a `FundingIdentifier` all work, since `discount_factor()`
+dispatches on the component itself, not on the caller's assumptions about its type):
+- `simple`:     `F = (DF(effective)/DF(termination) - 1) / tau`
+- `continuous`: `F = ln(DF(effective)/DF(termination)) / tau`, via `torch.log` on the graph-connected
+  discount-factor ratio (both `discount_factor(...)` calls use `calc_grad=True`, per the shared-state
+  footgun below).
+`K = product.coupon`, `tau = accrued(effective_date, termination_date, product.accrual_basis,
+product.business_day_convention, product.holiday_convention)` — `ProductGenericForward` has no stored
+`.accrued` property (unlike `ProductFixedAccrued`/`ProductCashDeposit`), so the engine computes it once
+in `__init__`. `payment_date_` (`product.pay_date`) defaults to `termination_date_`
+(`pay_date_or_offset` defaults to `TermOrDate("0D")`), matching the `PV = (F-K)*tau*N*P(0,T_e)`
+shorthand where `T_e` is the forward's own termination date — discounting is off the funding curve
+(`FundingIndexParameter`) at `payment_date_`, not `product.index` itself, consistent with every other
+atomic cashflow engine in this file (the funding curve and the projection index are independent
+curve components in this multi-curve setup). Because the funding discount factor doesn't depend on
+`F` (unlike the FRA's early-settlement discount factor, which is itself a function of the forward
+rate being discounted), PV is exactly affine in `F`, so `pv01()` is a closed form
+(`sign*notional*tau*df*1e-4`), no `torch.autograd.grad` needed — simpler than
+`ValuationEngineProductFRAOrFixing.pv01()`, which does need autograd for that reason.
+- Verified end to end against the same synthetic SOFR-1B curve fixture used elsewhere in this file:
+  for both `SIMPLE` and `CONTINUOUS` compounding, the engine's `forward_rate_` and `value_` matched an
+  independent closed-form computation (discount factors read with `calc_grad=False`, forward rate
+  derived the same way, `PV = notional*(F-K)*tau*DF_funding(pay_date)`) to float precision; `pv01()`
+  was identical across both compounding methods on the same trade (expected, since it doesn't depend
+  on how `F` was derived, only on `d(value_)/dF`).
+- **Found, not fixed, while building this fixture** (status since re-verified — `ProductGenericForward`
+  has since been fixed; the other two have not, so don't assume all three still share this bug):
+  `ProductGenericForward.__init__` originally set `self.termination_date_ = None` and only overwrote
+  it `if self.term_or_termination_date_.is_term(): ...`, with no `else` branch to set it from
+  `self.term_or_termination_date_.get_date()` when the caller passes an explicit `Date` instead of a
+  `Period`/tenor string — this has since been fixed (an `else` branch was added). `ProductGenericSpread.__init__`
+  and `ProductGenericForwardSpread.__init__` (`fixedincomelib/product/linear_products.py`) still have
+  the original bug, unfixed as of this writing. Constructing either of those two with an explicit
+  termination date (e.g. `TermOrDate(some_date)`) silently leaves `termination_date_`/`pay_date_`/
+  `last_date_` as `None`, then fails downstream with a confusing SWIG `TypeError` out of
+  `Calendar.advance(None, ...)` the first time something tries to `add_period` off it — not a
+  `None`-specific error message, so it's easy to misdiagnose as something else. Both remaining product
+  classes work fine when `term_or_termination_date` is a term/tenor (the common case, and the only form
+  exercised by either engine's own smoke test); flagged here rather than fixed since it's a
+  product-layer bug, not part of the valuation-engine work that surfaced it.
+
+`ValuationEngineProductGenericForwardSpread` prices `ProductGenericForwardSpread` — a spread between
+two *implied forward rates* (`product.basis_index` vs `product.reference_index`) over the same
+`[effective_date, termination_date]` period, rather than between two arbitrary data-convention
+products. It subclasses `ValuationEngineProductGenericSpread` and reuses that class's
+`calculate_value`/`par_rate_or_spread`/`pv01`/`get_value_and_cash`/`_fx_rate` **unchanged** — only
+`__init__` and `create_cash_flows_report` are overridden. The reuse works because both classes reduce
+to the identical shape (`self.target_engine_`/`self.reference_engine_`, each exposing `.value`/
+`.pv01()`/`.cash`, combined via `sign_*scale_*fx_*(reference - ratio*target)`); what differs is only
+how the two leg engines get built:
+- `__init__` calls `ValuationEngineProduct.__init__(...)` directly (skipping
+  `ValuationEngineProductGenericSpread.__init__`, which expects `product.basis_data_convention`/
+  `.reference_data_convention` — attributes `ProductGenericForwardSpread` doesn't have), then builds
+  the basis leg (target) and reference leg as two `ProductGenericForward` instances directly — basis
+  leg at coupon `0.` off `basis_index`, reference leg at coupon `-spread` off `reference_index`, same
+  target/reference role assignment as the data-convention `ValuationEngineProductGenericSpread`. Both
+  legs share `product.effective_date`/`product.termination_date` (passed as an explicit
+  `TermOrDate(product.termination_date)`, not re-derived from a tenor — `ProductGenericForward` now
+  handles this correctly per the fixed bug above), `product.notional`, and every settlement/payment
+  convention off the parent `ProductGenericForwardSpread`, and are both built `pay_or_rec=RECEIVE`
+  (the opposite-sides relationship is encoded in the combination formula's sign, not the build side —
+  same convention as the data-convention case). Each leg gets its own accrual basis: the basis leg
+  uses `product.accrual_basis`, the reference leg uses `product.reference_leg_accrual_basis` if given,
+  else falls back to `product.accrual_basis` too.
+- Because both legs are built on the *same* notional (`product.notional`, not a separately-derived
+  data-convention notional), `reference_notional_ == notional_` always, so `scale_` is always `1.`.
+  Currency, though, is **not** forced to `product.currency` on either leg — each is built with its own
+  index's native currency (`currency=product.basis_index.currency` / `product.reference_index.currency`,
+  both `@property`), mirroring how `ValuationEngineProductGenericSpread`'s target/reference each carry
+  whatever currency their own data convention produces, rather than the trade's currency. `fx_` is
+  therefore `1.` only when `basis_index`/`reference_index` share a currency (the common case — e.g.
+  SOFR vs Fed Funds, both USD), not unconditionally; the same `target_currency_ ==
+  reference_currency_` assertion added to `ValuationEngineProductGenericSpread.__init__` (see above) is
+  duplicated here rather than inherited, since this subclass builds its legs in its own `__init__`
+  without calling the parent's. `ratio_` (`reference.pv01()/target.pv01()`) is not always `1.` either —
+  it only collapses to `1.` when both legs share the same accrual basis and discounting, since
+  `reference_leg_accrual_basis` can differ from `accrual_basis` and each leg's own `tau_` (hence its
+  `pv01()`) is computed independently even though notional/pay_date/discounting are shared.
+- `create_cash_flows_report()` is overridden on this subclass directly (the same "contribution" idiom
+  originally written for `ValuationEngineProductGenericSpread` — see the fix described earlier in this
+  file for that class's `create_cash_flows_report`), pulling `PRODUCT_TYPE`/`VALUATION_ENGINE_TYPE`
+  from each leg's own `target_engine_.product_`/`reference_engine_.product_`, not the wrapper's own
+  type, and using `self.product_.pay_date` (not `.termination_date`) as the reported pay date, since a
+  `ProductGenericForwardSpread` can have a `pay_date_or_offset` distinct from its termination date.
+- Verified end to end against the same synthetic SOFR-1B / USD-Federal-Funds-H.15-1B curve fixture
+  used elsewhere in this file, spreading SOFR (basis) against Fed Funds (reference) over 2Y,
+  `CONTINUOUS` compounding, `spread=0.0010`: `engine.value` matched an independent closed-form
+  `sign*notional*tau_ref*df*((F_ref+spread) - ratio*F_basis)` computation to float precision (with
+  `ratio_ == 1.` on this fixture, since both legs shared the default accrual basis and discounting);
+  the two `create_cash_flows_report()` rows summed to `value_` exactly.
+
+`ValuationEngineProductZeroSpread` prices `ProductIBORZeroSpread` — a bilateral outright struck at a
+continuously-compounded zero-rate spread between two curve components, `basis_index` (the curve the
+spread is quoted against, e.g. an IBOR curve) and `reference_index` (the base/discounting curve,
+e.g. that currency's OIS curve): `PV = sign * notional * (DF_reference(T)/DF_basis(T) -
+exp(-spread*T))`, `T = accrued(value_date, termination_date)` (default ACT/ACT (ISDA), no
+accrual-basis field on the product). This is a straight port of the archived
+`ValuationEngineProductZeroSpread` (`yield_curve/archived/valuation_engine.py`, keyed to the
+no-longer-existing `ProductZeroSpread`, whose fields were `basis_index_str`/`reference_index_str`
+per `tests/test_linear_product.py`'s still-failing-to-collect fixture — see the Commands section)
+onto its live replacement product, `ProductIBORZeroSpread` (`product/linear_products.py`), with one
+architectural change: the archived engine pulled its "funding" (denominator-role) leg out of the
+vpc's `FundingIndexParameter` by currency rather than from a product field; `ProductIBORZeroSpread`
+carries `reference_index` explicitly as a stored `Index`/`FundingIdentifier`, so the new engine reads
+`product.basis_index`/`product.reference_index` directly and needs no `FundingIndexParameter` at
+all — same simplification pattern as `ValuationEngineProductGenericForward` reading `product.index`
+directly instead of going through the vpc. `sign_` comes from `product.pay_or_rec`
+(`PayOrReceive`), not `long_or_short` (the archived product had no `pay_or_rec`). Both discount
+factors are read with `calc_grad=True` and multiplied/divided directly (no anchored-index engine
+involved — this is a raw two-discount-factor ratio, not an accrual-period cashflow), so `value_`
+stays a live torch tensor and the base `ValuationEngineProduct.get_risk()` default (`.backward()`
+then `model_.get_gradient(reset=True)`) works unmodified, unlike the archived engine's own
+`calculate_first_order_risk`/`grad_at_par`, which used the numpy `resize_gradient`/
+`discount_factor_gradient_wrt_state` path — not reused here, per the modern-engine convention
+elsewhere in this file. `par_rate_or_spread()` is `-1/T * ln(DF_reference/DF_basis)` (solves
+`PV=0`, the direct analogue of the archived `grad_at_par`'s inline derivation, but returning the
+par spread itself rather than a gradient vector); `pv01()` is the closed-form
+`sign*notional*T*exp(-spread*T)*1e-4` (`spread` is a plain float, never wrapped in a tensor, so
+there's no graph to differentiate through, same reasoning as `ValuationEngineProductCashDeposit`).
+`create_cash_flows_report()` raises, same as the archived version — an outright zero-rate spread
+isn't a cashflow series. Verified end to end against a synthetic SOFR-1B (10-tenor) + SOFR-1B-FLAT
+(2-tenor: 5Y/10Y spread curve) fixture: PV at the computed `par_rate_or_spread()` was exactly `0.`;
+registry dispatch (`ValuationEngineProductRegistry().new_valuation_engine(...)`, newly registered
+under `ProductIBORZeroSpread._product_type`) matched direct construction exactly; `get_risk()`
+produced nonzero gradient entries on both curve components (dominant sensitivity on
+`SOFR-1B-FLAT`, the reference/spread leg, with float-noise-level entries on `SOFR-1B` itself).
+
+### Portfolio-level risk: per-product breakdown vs. aggregated (`RiskValParam`)
+
+`ValuationEngineProductPortfolio.get_risk` (`fixedincomelib/valuation/valuation_engine_portfolio.py`)
+always computes risk separately per element first and only then sums it — this was already true in
+shape (a `leg_grad`/`local_grad` accumulation loop), but the per-element breakdown used to be
+discarded once summed. It's now retained on `self.product_risk_` (exposed via a `product_risk`
+property — a list of `np.ndarray`, one per `product.elements_` entry, each already scaled by that
+element's portfolio weight, in the same order as `self.engines_`/`self.weights`/`self.currencies`).
+`get_risk`'s own signature/contract is unchanged (`gradient[:] = local_grad`, the aggregated array) —
+this matters because other engines call `child_engine.get_risk(gradient=some_flat_array)` recursively
+(nested portfolios, and the two-leg swap engines' own `get_risk` overrides) and all of them expect
+exactly one flat `np.ndarray` back, not a sometimes-list.
+
+Whether an external caller gets the aggregated array or the per-product breakdown is controlled by a
+new `ValuationParameters` type, `RiskValParam` (`fixedincomelib/valuation/valuation_parameters.py`,
+vp_type `"RISK PARAMETER"`, single key `LEVEL` ∈ `{"PORTFOLIO", "PRODUCT"}`, case-insensitive on
+input/stored uppercase, defaults to `"PORTFOLIO"` when omitted) — same
+`ValuationParameters.get_valid_keys()`/defaults pattern as `AnalyticValParam`/`FundingIndexParameter`,
+registered in `ValuationParametersBuilderRegistry` the same way. `ValuationEngineProductPortfolio.
+get_risk_report()` is the new entry point that reads it: internally calls `get_risk()`, then checks
+`valuation_parameters_collection_.has_vp_type(RiskValParam._vp_type)` — if the vpc has no
+`RiskValParam` at all (the common case today, since nothing constructs one yet outside tests), it
+silently defaults to `"PORTFOLIO"` and returns the same aggregated array `get_risk()` always produced,
+so existing callers are unaffected; only a caller that explicitly adds `RiskValParam({"LEVEL":
+"PRODUCT"})` to its vpc gets `product_risk_` back instead. Verified in
+`tests/test_valuation_engine_fixed_ibor_stream.ipynb` (§5e) against the notebook's existing
+4-cashflow `fixed_leg` portfolio fixture: `sum(product_risk)` reproduces `get_risk()`'s aggregated
+array exactly, and each element of `product_risk` was checked — not just for internal
+self-consistency, but against independently-built per-cashflow `ValuationEngineProductFixedAccrued`
+engines constructed directly off `fixed_leg.elements_[i]` — and matched exactly, confirming ordering
+as well as values. `RiskValParam` itself (defaults, validation, serialize/deserialize, registry
+round-trip) has unit coverage in `tests/test_valuation_parameters.py`.
 
 ## Day-count-basis footguns worth knowing about
 

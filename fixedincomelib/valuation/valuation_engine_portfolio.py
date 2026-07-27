@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 # in-house imports
@@ -17,7 +19,6 @@ class ValuationEngineProductPortfolio(ValuationEngineProduct):
         request: ValuationRequest,
     ):
         super().__init__(model, valuation_parameters_collection, product, request)
-        from typing import List
 
         self.engines_: List[ValuationEngineProduct] = []
         self.weights = []
@@ -54,19 +55,41 @@ class ValuationEngineProductPortfolio(ValuationEngineProduct):
 
     def get_risk(self, gradient=None) -> None:
 
-        # portfolio risk is the weight-scaled sum of each element's own risk -- every element
-        # shares this same model, so its gradient vector is the same length for all of them.
         local_grad = np.zeros_like(self.model_.get_gradient(reset=False))
 
+        # risk is always computed separately per product first, then aggregated to the portfolio level
+        self.product_risk_: List[np.ndarray] = []
         for i, engine in enumerate(self.engines_):
             leg_grad = np.zeros_like(local_grad)
             engine.get_risk(gradient=leg_grad)
-            local_grad += self.weights[i] * leg_grad
+            weighted_grad = self.weights[i] * leg_grad
+            self.product_risk_.append(weighted_grad)
+            local_grad += weighted_grad
 
         if gradient is None:
             return
 
         gradient[:] = local_grad
+
+    @property
+    def product_risk(self) -> List[np.ndarray]:
+        return self.product_risk_
+
+    # return vp to control risk report
+    def _risk_level(self) -> str:
+        vpc = self.valuation_parameters_collection_
+        if vpc.has_vp_type(RiskValParam._vp_type):
+            return vpc.get_vp_from_build_method_collection(RiskValParam._vp_type).level
+        return "PORTFOLIO"
+
+    def get_risk_report(self):
+        # vpc-driven view on top of get_risk(): "PORTFOLIO" (default) returns the aggregated
+        # gradient array; "PRODUCT" returns the per-product breakdown instead.
+        local_grad = np.zeros_like(self.model_.get_gradient(reset=False))
+        self.get_risk(gradient=local_grad)
+        if self._risk_level() == "PRODUCT":
+            return self.product_risk_
+        return local_grad
 
     def get_value_and_cash(self) -> PVCashReport:
         report = PVCashReport(self.currencies)

@@ -161,6 +161,7 @@ class Model(metaclass=ABCMeta):
         self.components_: Dict[str, ModelComponent] = {}
         self.component_indices_: Dict[str, int] = {}
         self.sub_model_ = None
+        self.n_state_ = -1
         # risk
         self.is_jacobian_calculated_ = False
         self.num_components_ = 0
@@ -178,6 +179,14 @@ class Model(metaclass=ABCMeta):
     @property
     def data_collection(self) -> DataCollection:
         return self.data_collection_
+
+    @property
+    def n_state(self) -> int:
+        if self.n_state_ < 0:
+            self.n_state_ += 1
+            for i in range(self.num_components_):
+                self.n_state_ += self.num_sub_components_[i]
+        return self.n_state_
 
     @property
     def build_method_collection(self) -> BuildMethodCollection:

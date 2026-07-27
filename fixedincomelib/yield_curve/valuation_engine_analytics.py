@@ -30,8 +30,6 @@ class ValuationEngineAnalyticsCompositeIndex(ValuationEngineAnalyticsAnchoredInd
         self.value_f_ = 0.0
         self.value_ = 0.0
 
-    ### aggregate a sequence of known daily fixings into a single compounded rate over [tau_h].
-    ### dispatched on compounding method (dict lookup instead of an if/elif chain).
     ## geometric(compound): prod
     ## arithmetic: dot
     _AGGREGATORS = {
@@ -160,9 +158,8 @@ class ValuationEngineAnalyticsIborIndex(ValuationEngineAnalyticsAnchoredIndex):
         self.value_f_ = 0.0
         self.value_ = 0.0
 
-    ### only handles the common, market-traded tenor: the anchored index's own accrual
-    ### period must equal its index's native term. Irregular (stub/extended) periods are
-    ### delegated to _calculate_irregular_period_value.
+    ### only handles the common, market-traded tenor
+    ### Irregular (stub/extended) periods are delegated to _calculate_irregular_period_value.
     def calculate_value(self):
 
         idx: AnchoredIborIndex = self.anchored_index_

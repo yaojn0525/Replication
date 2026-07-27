@@ -233,8 +233,40 @@ class FundingIndexParameter(ValuationParameters):
             return None
 
 
+class RiskValParam(ValuationParameters):
+
+    _version = 1
+    _vp_type = "RISK PARAMETER"
+
+    _VALID_LEVELS = {"PORTFOLIO", "PRODUCT"}
+
+    _DEFAULTS = {
+        "LEVEL": "PORTFOLIO",
+    }
+
+    def __init__(self, content: Union[List, dict]):
+        super().__init__("RISK PARAMETER", content)
+        for key, default in self._DEFAULTS.items():
+            if self.vp_dict_[key] == "":
+                self.vp_dict_[key] = default
+        if self.vp_dict_["LEVEL"].upper() not in self._VALID_LEVELS:
+            raise Exception(
+                f'LEVEL must be one of {self._VALID_LEVELS}, got {self.vp_dict_["LEVEL"]!r}.'
+            )
+        self.vp_dict_["LEVEL"] = self.vp_dict_["LEVEL"].upper()
+
+    def get_valid_keys(self) -> set:
+        return {"LEVEL"}
+
+    @property
+    def level(self) -> str:
+        return self.vp_dict_["LEVEL"]
+
+
 ### register
 ValuationParametersBuilderRegistry().register(AnalyticValParam._vp_type, AnalyticValParam)
 ValuationParametersBuilderRegistry().register(FundingIndexParameter._vp_type, FundingIndexParameter)
+ValuationParametersBuilderRegistry().register(RiskValParam._vp_type, RiskValParam)
 ValuationParametersBuilderRegistry().register(f"{AnalyticValParam._vp_type}_DES", AnalyticValParam.deserialize)
 ValuationParametersBuilderRegistry().register(f"{FundingIndexParameter._vp_type}_DES", FundingIndexParameter.deserialize)
+ValuationParametersBuilderRegistry().register(f"{RiskValParam._vp_type}_DES", RiskValParam.deserialize)

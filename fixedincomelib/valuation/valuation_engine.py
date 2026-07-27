@@ -131,17 +131,13 @@ class ValuationEngineProduct(ABC):
     def calculate_value(self):
         return
 
-    def get_risk(self, gradient=None) -> None:
+    def get_risk(self, gradient, scaler=None) -> None:
 
         if isinstance(self.value_, torch.Tensor) and self.value_.requires_grad:
             self.value_.backward(retain_graph=True)
 
-        local_grad = self.model_.get_gradient(reset=True)
-
-        if gradient is None:
-            return
-
-        gradient[:] = local_grad
+        gradient[:] = self.model_.get_gradient(reset=True)
+        gradient *= scaler if scaler is not None else 1.0
 
     @abstractmethod
     def create_cash_flows_report(self) -> CashflowsReport:
@@ -165,4 +161,10 @@ class ValuationEngineProduct(ABC):
 
     # optional
     def grad_at_par(self) -> np.ndarray:
-        pass
+
+        ### V(X^I, s) = 0, we have solved s already, by implicit function theorem,
+        ### dV/dX^I + dV/ds * ds/dX^I = 0, ds/dX^I = - (dV/ds)^-1 * dV/dX^I = - dV/dX^I / PV01
+
+        grad = np.zeros(self.model_.n_state)
+        self.get_risk(gradient=grad, scaler=-1 / self.pv01())
+        return grad

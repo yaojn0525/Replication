@@ -222,7 +222,7 @@ class ProductFactory:
             notional=data_convention.notional,
             accrual_period=data_convention.accrual_period,
             business_day_convention=data_convention.on_index.index.payment_business_day_conv,
-            holiday_convention=data_convention.on_index.index.payment_holiday_conv(),
+            holiday_convention=data_convention.on_index.index.payment_holiday_conv,
             schedule_generation_rule=ql.DateGeneration.Backward,
             on_accrual_basis=data_convention.on_index.index.accrual_basis,
             ibor_accrual_basis=data_convention.ibor_index.accrual_basis,
@@ -277,7 +277,7 @@ class ProductFactory:
             notional=data_convention.notional,
             accrual_period=data_convention.basis_accrual_period,
             business_day_convention=data_convention.basis_on_index.index.payment_business_day_conv,
-            holiday_convention=data_convention.basis_on_index.index.payment_holiday_conv(),
+            holiday_convention=data_convention.basis_on_index.index.payment_holiday_conv,
             schedule_generation_rule=ql.DateGeneration.Backward,
             basis_on_accrual_basis=data_convention.basis_on_index.index.accrual_basis,
             reference_on_accrual_basis=data_convention.reference_on_index.index.accrual_basis,
@@ -342,17 +342,17 @@ class ProductFactory:
             spread=values,
             schedule_generation_rule=ql.DateGeneration.Backward,
             business_day_convention=data_convention.basis_on_index.index.payment_business_day_conv,
-            holiday_convention=data_convention.basis_on_index.index.payment_holiday_conv(),
+            holiday_convention=data_convention.basis_on_index.index.payment_holiday_conv,
             payment_offset=data_convention.basis_payment_offset,
             payment_business_day_convention=data_convention.basis_on_index.index.payment_business_day_conv,
-            payment_holiday_convention=data_convention.basis_on_index.index.payment_holiday_conv(),
+            payment_holiday_convention=data_convention.basis_on_index.index.payment_holiday_conv,
             exchange_notional_at_start=True,
             exchange_notional_at_end=True,
             reference_leg_accrual_period=data_convention.reference_accrual_period,
             reference_leg_accrual_basis=data_convention.reference_on_index.index.accrual_basis,
             reference_leg_payment_offset=data_convention.reference_payment_offset,
             reference_leg_payment_business_day_convention=data_convention.reference_on_index.index.payment_business_day_conv,
-            reference_leg_payment_holidays=data_convention.reference_on_index.index.payment_holiday_conv())
+            reference_leg_payment_holidays=data_convention.reference_on_index.index.payment_holiday_conv)
     
     @classmethod
     def create_generic_forward(

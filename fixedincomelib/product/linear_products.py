@@ -987,7 +987,7 @@ class ProductFRAOrFixing(ProductIBORIndexCashflow):
         currency : Currency,
         notional : float,
         coupon : float,
-        index : IBORIndex|OvernightIndex,
+        index : IBORIndex,
         pay_date_or_offset : Optional[TermOrDate]=TermOrDate("0D"),
         fra_discounting_style : Optional[str]="ISDA"
     ) -> None:
@@ -1199,6 +1199,7 @@ class ProductOvernightIndexSwap(Product):
         self.long_or_short_ = LongOrShort.SHORT if notional < 0 else LongOrShort.LONG
         self.notional_ = notional
         self.currency_ = on_composite_index.index.currency
+
         ### fixed leg
         self.fixed_leg_ = ProductInterestRateStream(
             effective_date=effective_date,
@@ -1220,6 +1221,7 @@ class ProductOvernightIndexSwap(Product):
             end_of_month=on_composite_index.index.end_of_month,
             first_regular_date=first_regular_date,
             next_to_last_date=next_to_last_date)
+        
         ### floating leg
         self.floating_leg_accrual_period_ = floating_leg_accrual_period \
             if floating_leg_accrual_period else accrual_period
@@ -2038,7 +2040,7 @@ class ProductGenericForward(Product):
         self.holiday_convention_ = holiday_convention
 
         # figure out termination date
-        self.termination_date_ = None
+        self.termination_date_: Date = None
         if self.term_or_termination_date_.is_term():
             self.termination_date_ = add_period(
                 self.effective_date_,
@@ -2046,7 +2048,8 @@ class ProductGenericForward(Product):
                 self.business_day_convention_,
                 self.holiday_convention_,
                 self.end_of_month_)
-
+        else:
+            self.termination_date_ = self.term_or_termination_date_.get_date()
         # figure payment date
         self.pay_date_ = None
         if self.pay_date_or_offset_.is_term():
@@ -2451,14 +2454,14 @@ class ProductGenericSpread(Product):
             self.business_day_convention_ = self.basis_data_convention_.business_day_convention
         self.holiday_convention_ = ql.NullCalendar()
         if hasattr(self.basis_data_convention_, "holiday_convention"):
-            self.holiday_convention_ = self.holiday_convention_.holiday_convention
+            self.holiday_convention_ = self.basis_data_convention_.holiday_convention
 
         # figure out termination date
         self.termination_date_ = None
         if self.term_or_termination_date_.is_term():
-            self.termination_date_ = add_period(
+            self.termination_date_ : Date = add_period(
                 self.effective_date_,
-                self.term_or_termination_date.get_term(),
+                self.term_or_termination_date_.get_term(),
                 self.business_day_convention_,
                 self.holiday_convention_)
 
@@ -2475,7 +2478,7 @@ class ProductGenericSpread(Product):
         return self.term_or_termination_date_
     
     @property
-    def termination_date(self) -> TermOrDate:
+    def termination_date(self) -> Date:
         return self.termination_date_
     
     @property
